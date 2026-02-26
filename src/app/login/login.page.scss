@@ -1,0 +1,133 @@
+/* =====================================================
+   🔥 FONDO PREMIUM (igual línea visual que Home)
+===================================================== */
+
+.login-bg {
+  --background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(118, 91, 255, 0.25), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(64, 220, 255, 0.2), transparent 55%),
+    linear-gradient(180deg, #070A12 0%, #0A0F1C 60%, #06080F 100%);
+}
+
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.login-wrapper {
+  min-height: 100vh;
+  padding: 60px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =====================================================
+   CARD PRINCIPAL
+===================================================== */
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 45px;
+  border-radius: 28px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(18px);
+
+  transition: all 0.4s ease;
+}
+
+/* Glow al pasar mouse */
+.login-card:hover {
+  box-shadow:
+    0 0 40px rgba(118, 91, 255, 0.5),
+    0 0 70px rgba(64, 220, 255, 0.35);
+}
+
+/* =====================================================
+   TÍTULO
+===================================================== */
+
+.login-card h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.input-item {
+  --background: rgba(0, 0, 0, 0.5);
+  --border-radius: 18px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+
+  margin-bottom: 18px;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition: all 0.3s ease;
+}
+
+/* Glow focus */
+.input-item:focus-within {
+  border: 1px solid rgba(118, 91, 255, 0.8);
+  box-shadow:
+    0 0 15px rgba(118, 91, 255, 0.5),
+    0 0 25px rgba(64, 220, 255, 0.4);
+}
+
+/* Texto dentro input */
+ion-input {
+  color: #ffffff;
+}
+
+/* Placeholder */
+ion-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* =====================================================
+   BOTÓN LOGIN
+===================================================== */
+
+.login-btn {
+  --background: linear-gradient(135deg, #6f3df4, #23c6d9);
+  --border-radius: 20px;
+
+  height: 55px;
+  font-weight: 600;
+
+  margin-top: 10px;
+
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 30px rgba(118, 91, 255, 0.8),
+    0 0 45px rgba(64, 220, 255, 0.7);
+}
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.error-box {
+  margin-bottom: 15px;
+  color: #ff6b6b;
+  font-size: 14px;
+}

@@ -1,0 +1,95 @@
+<ion-content class="close-bg">
+  <div class="close-wrap">
+
+    <div class="topbar">
+      <div class="who">
+        <div class="avatar">{{ (session?.user?.nombre || 'U').slice(0,1) }}</div>
+        <div>
+          <div class="name">{{ session?.user?.nombre || '-' }}</div>
+          <div class="role">Cierre de turno</div>
+        </div>
+      </div>
+
+      <ion-button fill="clear" class="logout" (click)="salir()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <ion-label>Salir</ion-label>
+      </ion-button>
+    </div>
+
+    <div class="card">
+      <h1>Cierre</h1>
+      <p>Completa la información final del turno y firma.</p>
+
+      <div class="section">
+        <div class="section-title">Recepción de combustible</div>
+
+        <ion-segment [(ngModel)]="recepcionCombustible" class="seg">
+          <ion-segment-button value="SI"><ion-label>SI</ion-label></ion-segment-button>
+          <ion-segment-button value="NO"><ion-label>NO</ion-label></ion-segment-button>
+        </ion-segment>
+
+        <div *ngIf="recepcionCombustible === 'SI'" class="grid2">
+          <div class="f">
+            <label>Litros</label>
+            <ion-item lines="none" class="input">
+              <ion-input type="number" [(ngModel)]="litrosCombustible" placeholder="Ej: 500"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Nivel de agua TK-28</div>
+
+        <ion-segment [(ngModel)]="tk28EnServicio" class="seg">
+          <ion-segment-button value="SI"><ion-label>EN SERVICIO</ion-label></ion-segment-button>
+          <ion-segment-button value="NO"><ion-label>FUERA</ion-label></ion-segment-button>
+        </ion-segment>
+
+        <div *ngIf="tk28EnServicio === 'SI'" class="grid2">
+          <div class="f">
+            <label>Porcentaje (%)</label>
+            <ion-item lines="none" class="input">
+              <ion-input type="number" [(ngModel)]="tk28Porcentaje" placeholder="0 - 100"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Comentarios finales</div>
+        <ion-item lines="none" class="input">
+          <ion-textarea [(ngModel)]="comentariosFinales" autoGrow="true"
+            placeholder="Observaciones, anomalías, recomendaciones..."></ion-textarea>
+        </ion-item>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Firma</div>
+
+        <div class="sig-box">
+          <canvas
+            #sigCanvas
+            (mousedown)="startDraw($event)"
+            (mousemove)="draw($event)"
+            (mouseup)="endDraw()"
+            (mouseleave)="endDraw()"
+            (touchstart)="startDraw($event)"
+            (touchmove)="draw($event)"
+            (touchend)="endDraw()"
+          ></canvas>
+        </div>
+
+        <ion-button fill="outline" class="mini" (click)="limpiarFirma()">
+          Limpiar firma
+        </ion-button>
+      </div>
+
+      <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+      <ion-button class="cta" expand="block" (click)="cerrarTurno()" [disabled]="guardando">
+        {{ guardando ? 'Cerrando...' : 'CERRAR TURNO' }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

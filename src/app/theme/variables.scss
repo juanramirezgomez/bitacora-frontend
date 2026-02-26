@@ -1,0 +1,28 @@
+:root {
+  /** Colores base */
+  --ion-color-primary: #1f5fa8;
+  --ion-color-primary-rgb: 31, 95, 168;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #1b5494;
+  --ion-color-primary-tint: #3672b4;
+
+  --ion-color-secondary: #2f7bd6;
+  --ion-color-tertiary: #1a3e6f;
+
+  --ion-background-color: #0f172a; /* fondo oscuro elegante */
+  --ion-text-color: #e5e7eb;
+
+  --app-surface: rgba(255, 255, 255, 0.06);
+  --app-card: rgba(255, 255, 255, 0.08);
+  --app-border: rgba(255, 255, 255, 0.10);
+
+  --app-white: #f8fafc;
+  --app-dark: #0b1220;
+
+  --app-radius: 16px;
+  --app-radius-lg: 22px;
+  --app-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+
+  --app-header-grad: linear-gradient(135deg, #163a63, #1f5fa8 60%, #2f7bd6);
+}

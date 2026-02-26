@@ -1,0 +1,218 @@
+<ion-content class="admin-bg">
+  <div class="wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="who">
+        <div class="avatar">{{ (session?.user?.nombre || 'A').slice(0,1) }}</div>
+        <div>
+          <div class="name">{{ session?.user?.nombre || 'Administrador' }}</div>
+          <div class="role">ADMIN • Gestión de usuarios</div>
+        </div>
+      </div>
+
+      <ion-button fill="clear" class="logout" (click)="salir()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="card">
+      <div class="card-title">
+        <h2>Usuarios</h2>
+        <ion-button size="small" fill="outline" class="mini" (click)="cargarUsuarios()" [disabled]="cargando">
+          {{ cargando ? '...' : 'Recargar' }}
+        </ion-button>
+      </div>
+
+      <div class="filters">
+        <div class="f">
+          <label>Buscar</label>
+          <ion-item lines="none" class="input">
+            <ion-input [(ngModel)]="q" placeholder="username o nombre"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="f">
+          <label>Rol</label>
+          <ion-item lines="none" class="input">
+            <ion-select [(ngModel)]="rolFiltro" interface="popover">
+              <ion-select-option value="">Todos</ion-select-option>
+              <ion-select-option value="OPERADOR">OPERADOR</ion-select-option>
+              <ion-select-option value="SUPERVISOR">SUPERVISOR</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div class="f">
+          <label>Activo</label>
+          <ion-item lines="none" class="input">
+            <ion-select [(ngModel)]="activoFiltro" interface="popover">
+              <ion-select-option value="">Todos</ion-select-option>
+              <ion-select-option value="true">Activos</ion-select-option>
+              <ion-select-option value="false">Inactivos</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <ion-button class="btn" (click)="aplicarFiltros()" [disabled]="cargando">Aplicar</ion-button>
+        <ion-button class="btn ghost" fill="outline" (click)="limpiarFiltros()" [disabled]="cargando">Limpiar</ion-button>
+      </div>
+
+      <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+    </div>
+
+    <!-- CREAR -->
+    <div class="card">
+      <div class="card-title">
+        <h2>Crear usuario</h2>
+      </div>
+
+      <div class="grid">
+        <div class="f">
+          <label>Username</label>
+          <ion-item lines="none" class="input">
+            <ion-input [(ngModel)]="newUsername" placeholder="ej: jramirez"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="f">
+          <label>Nombre</label>
+          <ion-item lines="none" class="input">
+            <ion-input [(ngModel)]="newNombre" placeholder="Ej: Juan Ramirez"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="f">
+          <label>Rol</label>
+          <ion-item lines="none" class="input">
+            <ion-select [(ngModel)]="newRol" interface="popover">
+              <ion-select-option value="OPERADOR">OPERADOR</ion-select-option>
+              <ion-select-option value="SUPERVISOR">SUPERVISOR</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div class="f">
+          <label>Password</label>
+          <ion-item lines="none" class="input">
+            <ion-input
+              [(ngModel)]="newPassword"
+              [type]="mostrarNewPass ? 'text' : 'password'"
+              placeholder="********"
+            ></ion-input>
+
+            <ion-button fill="clear" slot="end" (click)="toggleNewPass()" class="eye">
+              <ion-icon [name]="mostrarNewPass ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+      </div>
+
+      <ion-button class="btn primary" expand="block" (click)="crearUsuario()" [disabled]="cargando">
+        {{ cargando ? 'Creando...' : 'Crear usuario' }}
+      </ion-button>
+    </div>
+
+    <!-- LISTA -->
+    <div class="card">
+      <div class="card-title">
+        <h2>Listado</h2>
+        <div class="meta">Total: {{ users.length }}</div>
+      </div>
+
+      <div *ngIf="cargando" class="muted">Cargando...</div>
+      <div *ngIf="!cargando && users.length === 0" class="muted">No hay usuarios.</div>
+
+      <ion-list *ngIf="!cargando && users.length > 0" class="list">
+        <ion-item *ngFor="let u of users" lines="none" class="row">
+          <ion-label>
+
+            <!-- si está en edición -->
+            <div *ngIf="editId === (u?.id || u?._id); else normalView" class="editbox">
+              <div class="grid">
+                <div class="f">
+                  <label>Username</label>
+                  <ion-item lines="none" class="input">
+                    <ion-input [(ngModel)]="editUsername"></ion-input>
+                  </ion-item>
+                </div>
+
+                <div class="f">
+                  <label>Nombre</label>
+                  <ion-item lines="none" class="input">
+                    <ion-input [(ngModel)]="editNombre"></ion-input>
+                  </ion-item>
+                </div>
+
+                <div class="f">
+                  <label>Rol</label>
+                  <ion-item lines="none" class="input">
+                    <ion-select [(ngModel)]="editRol" interface="popover">
+                      <ion-select-option value="OPERADOR">OPERADOR</ion-select-option>
+                      <ion-select-option value="SUPERVISOR">SUPERVISOR</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </div>
+              </div>
+
+              <div class="actions">
+                <ion-button size="small" class="mini" (click)="guardarEdicion()" [disabled]="cargando">Guardar</ion-button>
+                <ion-button size="small" fill="outline" class="mini" (click)="cancelarEditar()" [disabled]="cargando">Cancelar</ion-button>
+              </div>
+            </div>
+
+            <!-- vista normal -->
+            <ng-template #normalView>
+              <div class="r-top">
+                <div class="r-title">{{ u?.nombre || '-' }}</div>
+                <div class="pill" [class.off]="!u?.activo">
+                  {{ u?.rol || '-' }} • {{ u?.activo ? 'ACTIVO' : 'INACTIVO' }}
+                </div>
+              </div>
+              <div class="r-sub">
+                <span class="mono">user: {{ u?.username }}</span>
+                <span class="dot">•</span>
+                <span class="mono">id: {{ u?.id || u?._id }}</span>
+              </div>
+            </ng-template>
+          </ion-label>
+
+          <!-- acciones -->
+          <div class="btncol" *ngIf="editId !== (u?.id || u?._id)">
+            <ion-button size="small" fill="outline" class="mini" (click)="empezarEditar(u)" [disabled]="cargando">Editar</ion-button>
+            <ion-button size="small" fill="outline" class="mini" (click)="abrirReset(u)" [disabled]="cargando">Reset</ion-button>
+            <ion-button size="small" fill="outline" class="mini" (click)="toggleActivo(u)" [disabled]="cargando">
+              {{ u?.activo ? 'Desactivar' : 'Activar' }}
+            </ion-button>
+            <ion-button size="small" color="danger" class="mini" (click)="eliminar(u)" [disabled]="cargando">Eliminar</ion-button>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <!-- RESET BOX -->
+      <div class="resetbox" *ngIf="resetId">
+        <h3>Reset password</h3>
+
+        <ion-item lines="none" class="input">
+          <ion-input
+            [(ngModel)]="resetPassword"
+            [type]="mostrarResetPass ? 'text' : 'password'"
+            placeholder="Nueva contraseña"
+          ></ion-input>
+
+          <ion-button fill="clear" class="logout" (click)="salir()">
+            <ion-icon name="log-out-outline"></ion-icon>
+               <ion-label>Salir</ion-label>
+          </ion-button>
+        </ion-item>
+
+        <div class="actions">
+          <ion-button class="mini" (click)="confirmarReset()" [disabled]="cargando">Guardar</ion-button>
+          <ion-button fill="outline" class="mini" (click)="cancelarReset()" [disabled]="cargando">Cancelar</ion-button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ion-content>

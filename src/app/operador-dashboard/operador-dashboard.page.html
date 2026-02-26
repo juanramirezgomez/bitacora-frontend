@@ -1,0 +1,68 @@
+<ion-content fullscreen>
+
+  <div class="home-wrapper">
+
+    <!-- HEADER -->
+    <div class="home-header">
+      <div class="user-info">
+        <div class="avatar">
+          {{ session?.user?.nombre?.charAt(0) }}
+        </div>
+        <div class="user-text">
+          <h3>{{ session?.user?.nombre }}</h3>
+          <span>Rol: OPERADOR</span>
+        </div>
+      </div>
+
+      <ion-button fill="solid" class="logout-btn" (click)="salir()">
+        Salir
+      </ion-button>
+    </div>
+
+    <!-- CARD -->
+    <div class="home-card">
+      <h2>Iniciar turno</h2>
+      <p>Selecciona el turno y continúa al checklist inicial.</p>
+
+      <!-- Turno -->
+      <div class="selector-group">
+        <label>Turno</label>
+        <div class="selector-buttons">
+          <div class="selector-btn"
+               [class.active]="turno === 'Día'"
+               (click)="turno = 'Día'">
+            DÍA
+          </div>
+          <div class="selector-btn"
+               [class.active]="turno === 'Noche'"
+               (click)="turno = 'Noche'">
+            NOCHE
+          </div>
+        </div>
+      </div>
+
+      <!-- Número -->
+      <div class="selector-group">
+        <label>N° Turno</label>
+        <div class="selector-buttons">
+          <div class="selector-btn"
+               [class.active]="turnoNumero === '39'"
+               (click)="turnoNumero = '39'">
+            39
+          </div>
+          <div class="selector-btn"
+               [class.active]="turnoNumero === '44'"
+               (click)="turnoNumero = '44'">
+            44
+          </div>
+        </div>
+      </div>
+
+      <ion-button expand="block" class="main-btn" (click)="iniciarTurno()">
+        CONTINUAR A CHECKLIST
+      </ion-button>
+
+    </div>
+  </div>
+
+</ion-content>

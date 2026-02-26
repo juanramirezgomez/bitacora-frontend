@@ -1,0 +1,172 @@
+<ion-content class="bit-bg">
+
+  <div class="bit-wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div>
+        <div class="name">{{ session?.user?.nombre }}</div>
+        <div class="role">Rol: {{ session?.user?.rol }}</div>
+      </div>
+
+      <ion-button fill="clear" (click)="salir()">SALIR</ion-button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat">
+        <strong>{{ totalCerradas }}</strong>
+        <span>Bitácoras cerradas</span>
+      </div>
+
+      <div class="stat">
+        <strong>{{ totalFiltradas }}</strong>
+        <span>Mostradas</span>
+      </div>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div class="search-box">
+      <ion-input
+        placeholder="Buscar por operador o N° turno..."
+        [(ngModel)]="searchText"
+        (ionInput)="aplicarFiltros()">
+      </ion-input>
+    </div>
+
+    <!-- FILTRO FECHA -->
+    <div class="date-filter">
+      <ion-item lines="none">
+        <ion-label>Filtrar por fecha</ion-label>
+        <ion-datetime-button datetime="fechaFiltro"></ion-datetime-button>
+      </ion-item>
+
+      <ion-modal keepContentsMounted="true" cssClass="date-modal">
+        <ng-template>
+          <ion-datetime
+            id="fechaFiltro"
+            presentation="date"
+            [(ngModel)]="fechaFiltro"
+            (ionChange)="aplicarFiltros()">
+          </ion-datetime>
+        </ng-template>
+      </ion-modal>
+
+      <div class="date-actions" *ngIf="fechaFiltro">
+        <ion-button size="small" fill="outline" (click)="limpiarFecha()">
+          Limpiar fecha
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- LISTA BITÁCORAS -->
+    <div
+      *ngFor="let b of bitacorasFiltradas; trackBy: trackByBitacora"
+      class="card">
+
+      <div class="card-title">
+        <h2>{{ b.turno }} - {{ b.turnoNumero }}</h2>
+        <span class="estado-pill estado-cerrada">CERRADA</span>
+      </div>
+
+      <div class="meta">Operador: {{ b.operador }}</div>
+      <div class="meta">Inicio: {{ b.fechaInicio | date:'short' }}</div>
+      <div class="meta" *ngIf="b.fechaCierre">
+        Cierre: {{ b.fechaCierre | date:'short' }}
+      </div>
+
+      <div class="actions">
+        <ion-button size="small" fill="outline" (click)="verPdf(b)">
+          VISTA PREVIA
+        </ion-button>
+
+        <ion-button size="small" fill="solid" (click)="descargarPdf(b)">
+          PDF
+        </ion-button>
+
+        <ion-button size="small" color="success" fill="solid" (click)="descargarExcel(b)">
+          EXCEL
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- VACÍO -->
+    <div class="empty" *ngIf="!cargando && bitacorasFiltradas.length === 0">
+      <h3>No hay bitácoras para mostrar</h3>
+      <p>Prueba cambiando la fecha o el texto de búsqueda.</p>
+    </div>
+
+    <!-- PAGINACIÓN -->
+    <div class="pagination" *ngIf="totalFiltradas > 0">
+      <ion-button size="small" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+        Anterior
+      </ion-button>
+
+      <span>Página {{ paginaActual }}</span>
+
+      <ion-button size="small"
+                  (click)="paginaSiguiente()"
+                  [disabled]="(paginaActual * porPagina) >= totalFiltradas">
+        Siguiente
+      </ion-button>
+    </div>
+
+  </div>
+
+  <!-- MODAL PDF FULLSCREEN REAL -->
+  <ion-modal
+    [isOpen]="mostrarModal"
+    (didDismiss)="cerrarModal()"
+    cssClass="pdf-modal"
+    presentation="fullscreen"
+    backdropDismiss="false">
+
+    <ng-template>
+      <div class="pdf-modal-wrapper">
+
+        <div class="pdf-modal-header">
+          <div class="pdf-title">
+            <h2>Vista previa del reporte</h2>
+
+            <div class="pdf-sub" *ngIf="bitacoraSeleccionada">
+              <span class="pill">{{ bitacoraSeleccionada.operador }}</span>
+              <span class="dot">•</span>
+              <span class="pill pill-blue">
+                {{ bitacoraSeleccionada.turno }}-{{ bitacoraSeleccionada.turnoNumero }}
+              </span>
+              <span class="dot">•</span>
+              <span class="pill pill-muted">
+                {{ bitacoraSeleccionada.fechaCierre | date:'short' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="pdf-actions">
+            <ion-button size="small" fill="outline" (click)="descargarPdf(bitacoraSeleccionada)">
+              Descargar PDF
+            </ion-button>
+
+            <ion-button size="small" color="danger" (click)="cerrarModal()">
+              <ion-icon name="close-outline"></ion-icon>
+              Salir
+            </ion-button>
+          </div>
+        </div>
+
+        <div class="pdf-modal-content">
+          <iframe
+            *ngIf="pdfUrl"
+            [src]="pdfUrl"
+            class="pdf-frame-modern">
+          </iframe>
+
+          <div class="pdf-loading" *ngIf="!pdfUrl">
+            Cargando PDF…
+          </div>
+        </div>
+
+      </div>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

@@ -1,0 +1,174 @@
+/* ===== FONDO ===== */
+
+.home-bg {
+  --background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(118, 91, 255, 0.25), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(64, 220, 255, 0.2), transparent 55%),
+    linear-gradient(180deg, #070A12 0%, #0A0F1C 60%, #06080F 100%);
+}
+
+/* ===== WRAPPER ===== */
+
+.home-wrapper {
+  min-height: 100vh;
+  padding: 60px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== CARD ===== */
+
+.home-card {
+  width: 100%;
+  max-width: 950px;
+  padding: 45px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  transition: all 0.4s ease;
+}
+
+.home-card:hover {
+  box-shadow:
+    0 0 40px rgba(118, 91, 255, 0.5),
+    0 0 70px rgba(64, 220, 255, 0.35);
+}
+
+/* ===== HEADER ===== */
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+/* ===== USER ===== */
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6f3df4, #23c6d9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.user-role {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ===== LOGOUT ===== */
+
+.logout-btn {
+  --color: #ffffff;
+  font-weight: 600;
+}
+
+/* ===== TITULO ===== */
+
+.home-card h2 {
+  font-size: 28px;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+}
+
+/* ===== SELECTORES ===== */
+
+.selector-group {
+  margin-bottom: 25px;
+}
+
+.selector-group label {
+  color: #ffffff;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.selector-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.selector-btn {
+  flex: 1;
+  padding: 16px 0;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.selector-btn.active {
+  background: linear-gradient(135deg, #6f3df4, #23c6d9);
+  box-shadow:
+    0 0 20px rgba(118, 91, 255, 0.6),
+    0 0 35px rgba(64, 220, 255, 0.5);
+}
+
+.selector-btn:hover {
+  box-shadow:
+    0 0 15px rgba(118, 91, 255, 0.4),
+    0 0 25px rgba(64, 220, 255, 0.3);
+}
+
+/* ===== INFO ===== */
+
+.turno-info {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* ===== BOTÓN ===== */
+
+.continue-btn {
+  --background: linear-gradient(135deg, #6f3df4, #23c6d9);
+  --border-radius: 20px;
+  height: 55px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 30px rgba(118, 91, 255, 0.8),
+    0 0 45px rgba(64, 220, 255, 0.7);
+}
+
+/* ===== ERROR ===== */
+
+.error-box {
+  margin-top: 15px;
+  color: #ff6b6b;
+  font-size: 14px;
+}

@@ -1,0 +1,506 @@
+/* =========================================================
+   BITACORAS.PAGE.SCSS (COMPLETO)
+   - Glow/iluminación al hover (cards, stats, inputs, botones)
+   - Modal PDF fullscreen moderno
+   - Modal fecha compacto + calendario oscuro con números blancos
+========================================================= */
+
+/* =========================================
+   FONDO GLOBAL
+========================================= */
+.bit-bg {
+  --background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 50%,
+    #0f172a 100%
+  );
+}
+
+/* =========================================
+   WRAPPER
+========================================= */
+.bit-wrap {
+  padding: 25px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* =========================================
+   TOPBAR
+========================================= */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  margin-bottom: 30px;
+
+  transition: 0.25s ease;
+}
+
+.topbar:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.10),
+              0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.role {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.topbar ion-button {
+  --color: #38bdf8;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: 0.25s ease;
+}
+
+.topbar ion-button:hover {
+  filter: brightness(1.15);
+}
+
+/* =========================================
+   STATS
+========================================= */
+.stats-bar {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 25px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(56, 189, 248, 0.18),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: 0.25s ease;
+  pointer-events: none;
+}
+
+.stat:hover::before {
+  opacity: 1;
+}
+
+.stat:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, 0.30);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.10),
+              0 18px 55px rgba(0, 0, 0, 0.35);
+}
+
+.stat strong {
+  font-size: 30px;
+  color: #ffffff;
+  display: block;
+}
+
+.stat span {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* =========================================
+   BUSCADOR
+========================================= */
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box ion-input {
+  --background: rgba(255, 255, 255, 0.05);
+  --color: #ffffff;
+  --placeholder-color: rgba(148, 163, 184, 0.8);
+  --padding-start: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: 0.25s ease;
+}
+
+.search-box ion-input:hover {
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.08);
+}
+
+.search-box ion-input.ion-focused {
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+}
+
+/* =========================================
+   DATE FILTER
+========================================= */
+.date-filter {
+  margin-bottom: 25px;
+}
+
+.date-filter ion-item {
+  --background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: 0.25s ease;
+}
+
+.date-filter ion-item:hover {
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.08);
+}
+
+.date-filter ion-label {
+  color: #94a3b8;
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+.quick-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.quick-filters ion-button {
+  --border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: 0.25s ease;
+}
+
+.quick-filters ion-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* =========================================
+   CARD BITÁCORA
+========================================= */
+.card {
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  margin-bottom: 22px;
+  transition: 0.25s ease;
+  animation: fadeInUp 0.35s ease forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(
+    700px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(56, 189, 248, 0.16),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: 0.25s ease;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(56, 189, 248, 0.28);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.10),
+              0 22px 70px rgba(0, 0, 0, 0.38);
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.meta {
+  font-size: 13px;
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+/* =========================================
+   ESTADO PILL
+========================================= */
+.estado-pill {
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+
+.estado-abierta {
+  background: #facc15;
+  color: #000;
+}
+
+.estado-cerrada {
+  background: #22c55e;
+  color: #000;
+}
+
+/* =========================================
+   BOTONES ACCIONES
+========================================= */
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actions ion-button {
+  --border-radius: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  transition: 0.25s ease;
+}
+
+.actions ion-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* =========================================
+   PAGINACIÓN
+========================================= */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: #ffffff;
+}
+
+.pagination span {
+  font-size: 14px;
+}
+
+/* =========================================================
+   MODAL PDF — FULLSCREEN REAL (CLAVE)
+========================================================= */
+
+/* ⚠️ ESTO ES OBLIGATORIO */
+::ng-deep ion-modal.pdf-modal {
+  --width: 100vw;
+  --height: 100vh;
+  --border-radius: 0;
+  --background: transparent;
+}
+
+/* ⚠️ CONTENEDOR INTERNO DEL MODAL */
+::ng-deep ion-modal.pdf-modal::part(content) {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+/* WRAPPER */
+.pdf-modal-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(145deg, #0f172a, #1e293b);
+}
+
+/* HEADER */
+.pdf-modal-header {
+  flex-shrink: 0;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pdf-title h2 {
+  color: #ffffff;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* CONTENIDO */
+.pdf-modal-content {
+  flex: 1;
+  display: flex;
+  padding: 16px;
+  background: #0b1220;
+}
+
+/* IFRAME */
+.pdf-frame-modern {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #ffffff;
+  border-radius: 14px;
+}
+
+/* LOADING */
+.pdf-loading {
+  margin: auto;
+  color: #e5e7eb;
+}
+
+
+
+/* ANIMACIÓN */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   MODAL FECHA COMPACTO (menos espacio en blanco)
+========================================= */
+::ng-deep .date-modal {
+  --height: auto;
+  --width: 360px;
+  --border-radius: 16px;
+  --background: #0b1320;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55);
+}
+
+::ng-deep .date-modal ion-datetime {
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* =========================================
+   CALENDARIO: NÚMEROS CLAROS (BLANCOS)
+========================================= */
+::ng-deep ion-datetime {
+  --background: #494a4a;
+  --color: #ffffff;              /* números normales */
+  --color-selected: #ffffff;     /* número seleccionado */
+  --color-hover: #ffffff;
+  --wheel-highlight-background: rgba(59, 130, 246, 0.25);
+  --wheel-fade-background: transparent;
+  font-size: 15px;
+}
+
+/* Encabezado del calendario */
+::ng-deep ion-datetime::part(calendar-header) {
+  color: #e5e7eb;
+}
+
+::ng-deep ion-datetime::part(month-year-button),
+::ng-deep ion-datetime::part(next-button),
+::ng-deep ion-datetime::part(previous-button) {
+  color: #ffffff;
+}
+
+/* Hover en días (efecto iluminado) */
+::ng-deep ion-datetime::part(day):hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-radius: 50%;
+}
+
+/* =========================================
+   ANIMACIONES
+========================================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 768px) {
+  .bit-wrap {
+    padding: 18px;
+  }
+
+  .stats-bar {
+    flex-direction: column;
+  }
+
+  .card-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  ::ng-deep .pdf-modal {
+    --width: 100%;
+    --height: 100%;
+    --border-radius: 0px;
+  }
+
+  ::ng-deep .date-modal {
+    --width: 92vw;
+  }
+}

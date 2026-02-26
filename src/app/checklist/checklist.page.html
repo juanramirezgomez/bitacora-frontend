@@ -1,0 +1,283 @@
+<ion-content class="home-bg">
+
+  <div class="home-wrapper">
+    <div class="home-card">
+
+      <h2>Checklist Inicial</h2>
+      <p class="subtitle">
+        Verifica el estado general de la caldera y equipos auxiliares.
+      </p>
+
+      <!-- ============================= -->
+      <!-- CONDICIÓN GENERAL -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Condición del Equipo *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="condicionEquipo === 'EN_SERVICIO'"
+            (click)="condicionEquipo = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="condicionEquipo === 'FUERA_DE_SERVICIO'"
+            (click)="condicionEquipo = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- CALDERA HURST -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Caldera Hurst *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="calderaHurst === 'EN_SERVICIO'"
+            (click)="calderaHurst = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="calderaHurst === 'FUERA_DE_SERVICIO'"
+            (click)="calderaHurst = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- BOMBA ALIMENTACIÓN AGUA -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Bomba Alimentación Agua *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="bombaAlimentacionAgua === 'EN_SERVICIO'"
+            (click)="bombaAlimentacionAgua = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="bombaAlimentacionAgua === 'FUERA_DE_SERVICIO'"
+            (click)="bombaAlimentacionAgua = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- BOMBA PETRÓLEO -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Bomba Petróleo *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="bombaPetroleo === 'EN_SERVICIO'"
+            (click)="bombaPetroleo = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="bombaPetroleo === 'FUERA_DE_SERVICIO'"
+            (click)="bombaPetroleo = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- PURGA SUPERFICIE -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Purga Superficie *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="purgaSuperficie === 'EN_SERVICIO'"
+            (click)="purgaSuperficie = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="purgaSuperficie === 'FUERA_DE_SERVICIO'"
+            (click)="purgaSuperficie = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- BOMBA DOSIFICADORA -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Bomba Dosificadora Químicos *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="bombaDosificadoraQuimicos === 'EN_SERVICIO'"
+            (click)="bombaDosificadoraQuimicos = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="bombaDosificadoraQuimicos === 'FUERA_DE_SERVICIO'"
+            (click)="bombaDosificadoraQuimicos = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- TREN DE GAS -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Tren de Gas *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="trenGas === 'EN_SERVICIO'"
+            (click)="trenGas = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="trenGas === 'FUERA_DE_SERVICIO'"
+            (click)="trenGas = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- ABLANDADORES -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Ablandadores *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="ablandadores === 'EN_SERVICIO'"
+            (click)="ablandadores = 'EN_SERVICIO'">
+            EN SERVICIO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="ablandadores === 'FUERA_DE_SERVICIO'"
+            (click)="ablandadores = 'FUERA_DE_SERVICIO'">
+            FUERA DE SERVICIO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- NIVEL AGUA -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Nivel Agua Tubo Nivel *</label>
+        <div class="selector-buttons">
+
+          <div
+            class="selector-btn"
+            [class.active]="nivelAguaTuboNivel === 'BAJO'"
+            (click)="nivelAguaTuboNivel = 'BAJO'">
+            BAJO
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="nivelAguaTuboNivel === 'NORMAL'"
+            (click)="nivelAguaTuboNivel = 'NORMAL'">
+            NORMAL
+          </div>
+
+          <div
+            class="selector-btn"
+            [class.active]="nivelAguaTuboNivel === 'LLENO'"
+            (click)="nivelAguaTuboNivel = 'LLENO'">
+            LLENO
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- OBSERVACIONES -->
+      <!-- ============================= -->
+
+      <div class="selector-group">
+        <label>Observaciones</label>
+
+        <ion-textarea
+          [(ngModel)]="observacionesIniciales"
+          placeholder="Observaciones iniciales..."
+          auto-grow="true">
+        </ion-textarea>
+      </div>
+
+      <!-- ERROR -->
+      <div *ngIf="errorMsg" class="error-box">
+        {{ errorMsg }}
+      </div>
+
+      <!-- BOTONES -->
+      <div style="display:flex; justify-content:space-between; margin-top:25px;">
+
+        <ion-button fill="outline" (click)="volver()">
+          VOLVER
+        </ion-button>
+
+        <ion-button
+          class="continue-btn"
+          [disabled]="guardando"
+          (click)="guardarChecklist()">
+
+          {{ guardando ? 'Guardando...' : 'GUARDAR CHECKLIST' }}
+
+        </ion-button>
+
+      </div>
+
+    </div>
+  </div>
+
+</ion-content>

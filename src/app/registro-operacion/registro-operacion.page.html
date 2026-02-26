@@ -1,0 +1,159 @@
+<ion-content class="rop-bg">
+  <div class="rop-wrap">
+
+    <!-- HEADER -->
+    <div class="topbar">
+      <div class="user-info">
+        <div class="avatar">
+          {{ operadorNombre?.charAt(0) }}
+        </div>
+
+        <div>
+          <div class="name">{{ operadorNombre }}</div>
+          <div class="meta">
+            OPERADOR • Sesión activa •
+            {{ turnoDiaNoche }} • Turno {{ turnoNumero }}
+          </div>
+        </div>
+      </div>
+
+      <ion-button fill="outline" class="logout" (click)="salir()">
+        SALIR
+      </ion-button>
+    </div>
+
+    <h1 class="page-title">Registro de Operación</h1>
+
+    <!-- FORM CARD -->
+    <div class="card">
+
+      <div class="main-grid">
+
+        <!-- HORA -->
+        <div class="param-card">
+          <div class="param-header">
+            <label>Hora *</label>
+            <ion-icon name="time-outline"></ion-icon>
+          </div>
+
+          <div class="param-body">
+            <ion-input
+              type="time"
+              [(ngModel)]="hora">
+            </ion-input>
+          </div>
+        </div>
+
+        <!-- PARAMETROS -->
+        <div
+          class="param-card"
+          *ngFor="let p of parametros; let i = index">
+
+          <div class="param-header">
+            <ion-input
+              class="param-label-input"
+              [(ngModel)]="p.label">
+            </ion-input>
+
+            <ion-button
+              fill="clear"
+              size="small"
+              class="delete-btn"
+              (click)="eliminarParametro(i)"
+              *ngIf="parametros.length > 1">
+
+              <ion-icon name="close-outline"></ion-icon>
+
+            </ion-button>
+          </div>
+
+          <div class="param-body">
+            <ion-input
+              type="number"
+              [(ngModel)]="p.value"
+              placeholder="Valor">
+            </ion-input>
+
+            <ion-input
+              class="unit-input"
+              [(ngModel)]="p.unidad"
+              placeholder="Unidad">
+            </ion-input>
+          </div>
+
+        </div>
+
+        <!-- PURGA -->
+        <div class="purga-card">
+          <div class="purga-title">
+            <ion-icon name="water-outline"></ion-icon>
+            Purga de fondo
+          </div>
+
+          <ion-segment [(ngModel)]="purgaDeFondo">
+            <ion-segment-button value="SI">
+              <ion-label>SI</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="NO">
+              <ion-label>NO</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+
+      </div>
+
+      <!-- AGREGAR PARAMETRO -->
+      <div class="add-param">
+        <ion-button size="small" fill="outline" (click)="agregarParametro()">
+          + AGREGAR PARÁMETRO
+        </ion-button>
+      </div>
+
+      <!-- BOTONES -->
+      <div class="actions">
+        <ion-button expand="block" class="cta" (click)="guardar()">
+          {{ editId ? 'ACTUALIZAR REGISTRO' : 'GUARDAR REGISTRO' }}
+        </ion-button>
+
+        <ion-button expand="block" fill="outline" (click)="irACierre()">
+          FINALIZAR → IR A CIERRE
+        </ion-button>
+      </div>
+
+    </div>
+
+    <!-- REGISTROS -->
+    <div class="card">
+      <h2>Registros guardados</h2>
+
+      <div *ngIf="registros.length === 0" class="muted">
+        No hay registros aún.
+      </div>
+
+      <div *ngFor="let r of registros" class="registro-card">
+
+        <div class="registro-header">
+          <strong>{{ r.hora }}</strong>
+        </div>
+
+        <div class="registro-grid">
+          <div *ngFor="let p of r.parametros">
+            {{ p.label }}: {{ p.value }} {{ p.unidad }}
+          </div>
+        </div>
+
+        <div class="registro-actions">
+          <ion-button size="small" fill="outline" (click)="cargarEnForm(r)">
+            Editar
+          </ion-button>
+
+          <ion-button size="small" color="danger" fill="outline" (click)="eliminar(r)">
+            Eliminar
+          </ion-button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</ion-content>

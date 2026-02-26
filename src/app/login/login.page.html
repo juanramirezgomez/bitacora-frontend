@@ -1,0 +1,55 @@
+
+<ion-content class="login-bg">
+
+  <div class="login-wrapper">
+
+    <div class="login-card">
+
+      <h2>Bitácora Caldera</h2>
+      <p class="subtitle">
+        Ingresa tus credenciales para continuar
+      </p>
+
+      <!-- Usuario -->
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          type="text"
+          placeholder="Usuario"
+          [(ngModel)]="username">
+        </ion-input>
+      </ion-item>
+
+      <!-- Password -->
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="password">
+        </ion-input>
+      </ion-item>
+
+      <!-- Error -->
+      <div class="error-box" *ngIf="errorMsg">
+        {{ errorMsg }}
+      </div>
+
+      <!-- Botón Login -->
+      <ion-button
+        expand="block"
+        class="login-btn"
+        [disabled]="cargando"
+        (click)="login()">
+
+        <ion-spinner *ngIf="cargando" name="crescent"></ion-spinner>
+
+        <span *ngIf="!cargando">
+          Iniciar sesión
+        </span>
+
+      </ion-button>
+
+    </div>
+
+  </div>
+
+</ion-content>

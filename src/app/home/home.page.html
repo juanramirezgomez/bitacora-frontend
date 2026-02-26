@@ -1,0 +1,101 @@
+<ion-content class="home-bg">
+
+  <div class="home-wrapper">
+
+    <div class="home-card">
+
+      <!-- HEADER -->
+      <div class="card-header">
+
+        <div class="user-box" *ngIf="session?.user">
+
+          <div class="avatar">
+            {{ session.user.nombre?.charAt(0) }}
+          </div>
+
+          <div class="user-text">
+            <div class="user-name">
+              {{ session.user.nombre }}
+            </div>
+            <div class="user-role">
+              Rol: {{ session.user.rol }}
+            </div>
+          </div>
+
+        </div>
+
+        <ion-button fill="clear"
+                    class="logout-btn"
+                    (click)="salir()">
+          SALIR
+        </ion-button>
+
+      </div>
+
+      <h2>Iniciar turno</h2>
+      <p class="subtitle">
+        Selecciona el turno y continúa al checklist inicial.
+      </p>
+
+      <!-- TURNO -->
+      <div class="selector-group">
+        <label>Turno</label>
+        <div class="selector-buttons">
+
+          <div class="selector-btn"
+               [class.active]="turno === 'DIA'"
+               (click)="turno = 'DIA'">
+            DÍA
+          </div>
+
+          <div class="selector-btn"
+               [class.active]="turno === 'NOCHE'"
+               (click)="turno = 'NOCHE'">
+            NOCHE
+          </div>
+
+        </div>
+      </div>
+
+      <!-- NUMERO -->
+      <div class="selector-group">
+        <label>N° Turno</label>
+        <div class="selector-buttons">
+
+          <div class="selector-btn"
+               [class.active]="turnoNumero === '39'"
+               (click)="turnoNumero = '39'">
+            39
+          </div>
+
+          <div class="selector-btn"
+               [class.active]="turnoNumero === '44'"
+               (click)="turnoNumero = '44'">
+            44
+          </div>
+
+        </div>
+      </div>
+
+      <div class="turno-info">
+        Turno seleccionado: {{ turno }} - Turno {{ turnoNumero }}
+      </div>
+
+      <!-- BOTÓN -->
+      <ion-button expand="block"
+                  class="continue-btn"
+                  (click)="iniciarTurno()">
+
+        {{ bitacoraAbierta ? 'CONTINUAR TURNO ACTIVO' : 'INICIAR TURNO' }}
+
+      </ion-button>
+
+      <div class="error-box" *ngIf="bitacoraAbierta">
+        
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>
