@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage-angular';
   imports: [IonicModule, CommonModule, FormsModule],
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  
 })
 export class LoginPage {
 

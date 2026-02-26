@@ -1,4 +1,3 @@
-
 <ion-content class="login-bg">
 
   <div class="login-wrapper">
@@ -10,37 +9,54 @@
         Ingresa tus credenciales para continuar
       </p>
 
-      <!-- Usuario -->
-      <ion-item lines="none" class="input-item">
+      <!-- USUARIO -->
+      <ion-item
+        fill="outline"
+        class="input-item"
+        lines="none">
+
         <ion-input
+          label="Usuario"
+          labelPlacement="floating"
           type="text"
-          placeholder="Usuario"
-          [(ngModel)]="username">
+          [(ngModel)]="username"
+          aria-label="Usuario">
         </ion-input>
+
       </ion-item>
 
-      <!-- Password -->
-      <ion-item lines="none" class="input-item">
+      <!-- CONTRASEÑA -->
+      <ion-item
+        fill="outline"
+        class="input-item"
+        lines="none">
+
         <ion-input
+          label="Contraseña"
+          labelPlacement="floating"
           type="password"
-          placeholder="Contraseña"
-          [(ngModel)]="password">
+          [(ngModel)]="password"
+          aria-label="Contraseña">
         </ion-input>
+
       </ion-item>
 
-      <!-- Error -->
+      <!-- ERROR -->
       <div class="error-box" *ngIf="errorMsg">
         {{ errorMsg }}
       </div>
 
-      <!-- Botón Login -->
+      <!-- BOTÓN -->
       <ion-button
         expand="block"
         class="login-btn"
         [disabled]="cargando"
         (click)="login()">
 
-        <ion-spinner *ngIf="cargando" name="crescent"></ion-spinner>
+        <ion-spinner
+          *ngIf="cargando"
+          name="crescent">
+        </ion-spinner>
 
         <span *ngIf="!cargando">
           Iniciar sesión
