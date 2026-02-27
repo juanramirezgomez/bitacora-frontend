@@ -10,7 +10,7 @@
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 
-/* Utilities (MUY IMPORTANTES en producción) */
+/* Utilities */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
@@ -19,16 +19,15 @@
 @import "@ionic/angular/css/display.css";
 
 /* =====================================================
-   🌈 TUS VARIABLES
+   🌈 VARIABLES
 ===================================================== */
 
 @import "theme/variables";
 
 /* =====================================================
-   🎨 TU DISEÑO PERSONALIZADO
+   🎨 FONDO GLOBAL APP
 ===================================================== */
 
-/* Fondo tipo app pro */
 ion-content {
   --background:
     radial-gradient(1200px 600px at 20% 10%, rgba(47, 123, 214, 0.22), transparent 60%),
@@ -36,7 +35,12 @@ ion-content {
     linear-gradient(180deg, #0b1220, #0f172a);
 }
 
-/* Header con gradiente */
+/* =====================================================
+   🧱 COMPONENTES PERSONALIZADOS (SOLO CON CLASES)
+   ⚠️ NUNCA tocar ion-item o ion-input globalmente
+===================================================== */
+
+/* Header personalizado */
 ion-header.app-header ion-toolbar {
   --background: transparent;
   background: var(--app-header-grad);
@@ -49,7 +53,7 @@ ion-header.app-header ion-toolbar {
   align-items: center;
 }
 
-/* Logo en header */
+/* Logo */
 .app-logo {
   height: 26px;
   width: auto;
@@ -64,7 +68,7 @@ ion-header.app-header ion-toolbar {
   letter-spacing: 0.2px;
 }
 
-/* Cards */
+/* Card personalizada */
 .app-card {
   background: var(--app-card);
   border: 1px solid var(--app-border);
@@ -80,7 +84,7 @@ ion-header.app-header ion-toolbar {
   padding: 16px;
 }
 
-/* Titles */
+/* Títulos */
 .section-title {
   margin: 0 0 10px 0;
   font-size: 16px;
@@ -88,8 +92,11 @@ ion-header.app-header ion-toolbar {
   color: #0b1220;
 }
 
-/* Inputs */
-ion-item.app-item {
+/* =====================================================
+   🎯 INPUTS SEGUROS (SOLO CON CLASE)
+===================================================== */
+
+.app-item {
   --background: #ffffff;
   --border-radius: 14px;
   --padding-start: 12px;
@@ -99,23 +106,26 @@ ion-item.app-item {
   border: 1px solid rgba(15, 23, 42, 0.10);
 }
 
-ion-input,
-ion-select,
-ion-textarea {
+/* Espaciado interno sin romper interacción */
+.app-item ion-input,
+.app-item ion-select,
+.app-item ion-textarea {
   --padding-top: 10px;
   --padding-bottom: 10px;
 }
 
-/* Botón principal */
-ion-button.app-primary {
+/* =====================================================
+   🔘 BOTONES PERSONALIZADOS
+===================================================== */
+
+.app-primary {
   --border-radius: 16px;
   height: 48px;
   font-weight: 800;
   letter-spacing: 0.3px;
 }
 
-/* Botón secundario */
-ion-button.app-ghost {
+.app-ghost {
   --border-radius: 16px;
   height: 44px;
 }
