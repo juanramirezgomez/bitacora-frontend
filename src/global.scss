@@ -2,10 +2,20 @@
    🔥 IONIC CORE STYLES (OBLIGATORIO)
 ===================================================== */
 
+/* Core */
 @import "@ionic/angular/css/core.css";
+
+/* Base */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
+
+/* Utilities (MUY IMPORTANTES en producción) */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
 @import "@ionic/angular/css/display.css";
 
 /* =====================================================
@@ -20,7 +30,8 @@
 
 /* Fondo tipo app pro */
 ion-content {
-  --background: radial-gradient(1200px 600px at 20% 10%, rgba(47, 123, 214, 0.22), transparent 60%),
+  --background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(47, 123, 214, 0.22), transparent 60%),
     radial-gradient(1000px 500px at 80% 20%, rgba(31, 95, 168, 0.22), transparent 60%),
     linear-gradient(180deg, #0b1220, #0f172a);
 }
