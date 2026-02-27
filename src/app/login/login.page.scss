@@ -1,5 +1,5 @@
 /* =====================================================
-   🔥 FONDO PREMIUM
+   🔥 FONDO PREMIUM + CENTRADO REAL EN IONIC
 ===================================================== */
 
 ion-content.login-bg {
@@ -7,7 +7,10 @@ ion-content.login-bg {
     radial-gradient(1200px 600px at 20% 10%, rgba(118, 91, 255, 0.25), transparent 60%),
     radial-gradient(900px 500px at 80% 20%, rgba(64, 220, 255, 0.2), transparent 55%),
     linear-gradient(180deg, #070A12 0%, #0A0F1C 60%, #06080F 100%);
+}
 
+/* 🔥 ESTE ES EL CENTRADO CORRECTO EN IONIC */
+ion-content.login-bg::part(scroll) {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,11 +23,11 @@ ion-content.login-bg {
 .login-wrapper {
   width: 100%;
   max-width: 520px;
-  padding: 60px 30px;
+  padding: 30px;
 }
 
 /* =====================================================
-   CARD PRINCIPAL
+   CARD PRINCIPAL (GLASS EFFECT)
 ===================================================== */
 
 .login-card {
@@ -90,7 +93,7 @@ ion-content.login-bg {
     0 0 25px rgba(64, 220, 255, 0.4);
 }
 
-/* Texto dentro input */
+/* Texto input */
 ion-input {
   color: #ffffff;
 }
@@ -133,7 +136,9 @@ ion-input::placeholder {
   font-size: 14px;
 }
 
-/* FORZAR VISIBILIDAD INPUTS EN PRODUCCIÓN */
+/* =====================================================
+   🔒 FORZAR VISIBILIDAD INPUTS EN PRODUCCIÓN
+===================================================== */
 
 ion-item {
   --background: rgba(255, 255, 255, 0.08) !important;
