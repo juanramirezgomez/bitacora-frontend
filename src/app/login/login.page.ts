@@ -1,18 +1,40 @@
 import { Component } from '@angular/core';
-import { IonicModule, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import {
+  IonContent,
+  IonItem,
+  IonInput,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  ToastController
+} from '@ionic/angular/standalone';
+
 import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonItem,
+    IonInput,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle
+  ],
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  
 })
 export class LoginPage {
 
@@ -52,7 +74,6 @@ export class LoginPage {
 
         this.cargando = false;
 
-        // 🔥 REDIRECCIÓN SEGÚN ROL
         if (rol === 'OPERADOR') {
           await this.router.navigateByUrl('/home', { replaceUrl: true });
         }
