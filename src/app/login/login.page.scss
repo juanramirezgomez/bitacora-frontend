@@ -1,12 +1,16 @@
 /* =====================================================
-   🔥 FONDO PREMIUM (igual línea visual que Home)
+   🔥 FONDO PREMIUM
 ===================================================== */
 
-.login-bg {
+ion-content.login-bg {
   --background:
     radial-gradient(1200px 600px at 20% 10%, rgba(118, 91, 255, 0.25), transparent 60%),
     radial-gradient(900px 500px at 80% 20%, rgba(64, 220, 255, 0.2), transparent 55%),
     linear-gradient(180deg, #070A12 0%, #0A0F1C 60%, #06080F 100%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* =====================================================
@@ -14,11 +18,9 @@
 ===================================================== */
 
 .login-wrapper {
-  min-height: 100vh;
+  width: 100%;
+  max-width: 520px;
   padding: 60px 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* =====================================================
@@ -27,7 +29,6 @@
 
 .login-card {
   width: 100%;
-  max-width: 420px;
   padding: 45px;
   border-radius: 28px;
 
