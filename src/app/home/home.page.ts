@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
+import {
+  IonContent,
+  IonButton
+} from '@ionic/angular/standalone';
+
 import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonButton
+  ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
@@ -31,10 +41,6 @@ export class HomePage implements OnInit {
     private router: Router
   ) {}
 
-  // =========================================
-  // INIT
-  // =========================================
-
   async ngOnInit() {
     await this.storage.create();
 
@@ -47,10 +53,6 @@ export class HomePage implements OnInit {
 
     this.validarBitacoraAbierta();
   }
-
-  // =========================================
-  // VALIDAR CON BACKEND SI HAY ABIERTA
-  // =========================================
 
   validarBitacoraAbierta() {
 
@@ -76,7 +78,6 @@ export class HomePage implements OnInit {
 
       error: async () => {
 
-        // Si backend falla o no existe → limpiar estado
         this.bitacoraAbierta = false;
         this.bitacoraId = null;
 
@@ -84,10 +85,6 @@ export class HomePage implements OnInit {
       }
     });
   }
-
-  // =========================================
-  // BOTÓN PRINCIPAL
-  // =========================================
 
   iniciarTurno() {
 
@@ -121,7 +118,6 @@ export class HomePage implements OnInit {
 
         this.cargando = false;
 
-        // 🔥 Si devuelve 409 significa que ya hay una abierta
         if (err?.status === 409 && err?.error?.bitacora?._id) {
 
           const id = err.error.bitacora._id;
@@ -137,20 +133,14 @@ export class HomePage implements OnInit {
     });
   }
 
-  // =========================================
-  // CONTINUAR FLUJO INTELIGENTE
-  // =========================================
-
   continuarTurno() {
 
     if (!this.bitacoraId) return;
 
-    // Paso 1 → Verificar checklist
     this.api.obtenerChecklistInicial(this.bitacoraId).subscribe({
 
       next: () => {
 
-        // Paso 2 → Verificar registros
         this.api.listarRegistroOperacion(this.bitacoraId!).subscribe({
 
           next: (registros: any[]) => {
@@ -160,7 +150,6 @@ export class HomePage implements OnInit {
               return;
             }
 
-            // Si tiene registros → ir a registro
             this.router.navigate(['/registro-operacion'], { replaceUrl: true });
           },
 
@@ -171,16 +160,10 @@ export class HomePage implements OnInit {
       },
 
       error: () => {
-
-        // No existe checklist → ir a checklist
         this.router.navigate(['/checklist'], { replaceUrl: true });
       }
     });
   }
-
-  // =========================================
-  // SALIR
-  // =========================================
 
   async salir() {
     await this.storage.clear();
