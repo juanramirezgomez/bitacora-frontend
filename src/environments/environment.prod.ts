@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://bitacora-caldera-backend.onrender.com'
+  apiUrl: 'https://bitacora-backend-vb0e.onrender.com/api'
 };
 
