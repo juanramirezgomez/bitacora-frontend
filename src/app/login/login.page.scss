@@ -132,3 +132,18 @@ ion-input::placeholder {
   color: #ff6b6b;
   font-size: 14px;
 }
+
+/* FORZAR VISIBILIDAD INPUTS EN PRODUCCIÓN */
+
+ion-item {
+  --background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+}
+
+ion-input {
+  color: #ffffff !important;
+}
+
+ion-input input {
+  color: #ffffff !important;
+}
