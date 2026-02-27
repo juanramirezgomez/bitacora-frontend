@@ -1,25 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { ApiService } from '../services/api';
-
-import {
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonList,
-  IonIcon,
-  IonSegment,
-  IonSegmentButton,
-  IonRadioGroup,
-  IonRadio
-} from '@ionic/angular/standalone';
-
-import { ToastController } from '@ionic/angular';
 
 import { addIcons } from 'ionicons';
 import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
@@ -27,21 +12,7 @@ import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
 @Component({
   selector: 'app-registro-operacion',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonContent,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonList,
-    IonIcon,
-    IonSegment,
-    IonSegmentButton,
-    IonRadioGroup,
-    IonRadio
-  ],
+  imports: [IonicModule, CommonModule, FormsModule],
   templateUrl: './registro-operacion.page.html',
   styleUrls: ['./registro-operacion.page.scss'],
 })
@@ -56,6 +27,7 @@ export class RegistroOperacionPage implements OnInit {
   purgaDeFondo: 'SI' | 'NO' = 'NO';
 
   editId: string | null = null;
+
   registros: any[] = [];
 
   parametros: any[] = [
@@ -74,7 +46,13 @@ export class RegistroOperacionPage implements OnInit {
     private api: ApiService,
     private toast: ToastController
   ) {
-    addIcons({ timeOutline, waterOutline, closeOutline });
+
+    addIcons({
+      timeOutline,
+      waterOutline,
+      closeOutline
+    });
+
   }
 
   async ngOnInit() {
@@ -100,6 +78,7 @@ export class RegistroOperacionPage implements OnInit {
 
   cargar() {
     if (!this.bitacoraId) return;
+
     this.api.listarRegistroOperacion(this.bitacoraId)
       .subscribe((res: any) => {
         this.registros = res || [];
@@ -107,7 +86,11 @@ export class RegistroOperacionPage implements OnInit {
   }
 
   agregarParametro() {
-    this.parametros.push({ label: 'Nuevo parámetro', unidad: '', value: '' });
+    this.parametros.push({
+      label: 'Nuevo parámetro',
+      unidad: '',
+      value: ''
+    });
   }
 
   eliminarParametro(index: number) {
@@ -148,16 +131,19 @@ export class RegistroOperacionPage implements OnInit {
   cargarEnForm(r: any) {
     this.editId = r._id;
     this.hora = r.hora;
+
     this.parametros = r.parametros.map((p: any) => ({
       label: p.label,
       unidad: p.unidad,
       value: p.value
     }));
+
     this.purgaDeFondo = r.purgaDeFondo;
   }
 
   eliminar(r: any) {
     if (!this.bitacoraId) return;
+
     this.api.eliminarRegistroOperacion(this.bitacoraId, r._id)
       .subscribe(() => {
         this.cargar();
@@ -171,9 +157,17 @@ export class RegistroOperacionPage implements OnInit {
     this.purgaDeFondo = 'NO';
   }
 
+  /* 🔥 REDIRECCIÓN CORREGIDA */
   irACierre() {
+
     if (!this.bitacoraId) return;
-    this.router.navigate(['/cierre'], { replaceUrl: true });
+
+    this.router.navigate(['/cierre'], {
+      replaceUrl: true
+    }).then(() => {
+      window.scrollTo(0, 0);
+    });
+
   }
 
   async mostrarToast(mensaje: string, color: string) {
@@ -189,4 +183,5 @@ export class RegistroOperacionPage implements OnInit {
     await this.storage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
+
 }
