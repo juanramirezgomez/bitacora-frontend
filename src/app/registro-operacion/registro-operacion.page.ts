@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { ApiService } from '../services/api';
+import { ToastController } from '@ionic/angular';
 
 import {
   IonContent,
   IonInput,
   IonButton,
   IonIcon,
-  IonRadioGroup,
-  IonRadio,
-  IonItem,
-  IonLabel, IonSegmentButton } from '@ionic/angular/standalone';
+  IonSegment,
+  IonSegmentButton,
+  IonLabel
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
@@ -22,16 +22,15 @@ import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
 @Component({
   selector: 'app-registro-operacion',
   standalone: true,
-  imports: [IonSegmentButton, 
+  imports: [
     CommonModule,
     FormsModule,
     IonContent,
     IonInput,
     IonButton,
     IonIcon,
-    IonRadioGroup,
-    IonRadio,
-    IonItem,
+    IonSegment,
+    IonSegmentButton,
     IonLabel
   ],
   templateUrl: './registro-operacion.page.html',
@@ -66,7 +65,11 @@ export class RegistroOperacionPage implements OnInit {
     private api: ApiService,
     private toast: ToastController
   ) {
-    addIcons({ timeOutline, waterOutline, closeOutline });
+    addIcons({
+      timeOutline,
+      waterOutline,
+      closeOutline
+    });
   }
 
   async ngOnInit() {
@@ -174,7 +177,9 @@ export class RegistroOperacionPage implements OnInit {
   irACierre() {
     if (!this.bitacoraId) return;
 
-    this.router.navigate(['/cierre'], { replaceUrl: true });
+    this.router.navigate(['/cierre'], {
+      replaceUrl: true
+    });
   }
 
   async mostrarToast(mensaje: string, color: string) {
@@ -183,11 +188,12 @@ export class RegistroOperacionPage implements OnInit {
       duration: 2000,
       color
     });
-    t.present();
+    await t.present();
   }
 
   async salir() {
     await this.storage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
+
 }
