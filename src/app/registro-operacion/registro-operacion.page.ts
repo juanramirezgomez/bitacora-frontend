@@ -11,10 +11,10 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel
-} from '@ionic/angular/standalone';
+  IonRadioGroup,
+  IonRadio,
+  IonItem,
+  IonLabel, IonSegmentButton } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
@@ -22,15 +22,16 @@ import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
 @Component({
   selector: 'app-registro-operacion',
   standalone: true,
-  imports: [
+  imports: [IonSegmentButton, 
     CommonModule,
     FormsModule,
     IonContent,
     IonInput,
     IonButton,
     IonIcon,
-    IonSegment,
-    IonSegmentButton,
+    IonRadioGroup,
+    IonRadio,
+    IonItem,
     IonLabel
   ],
   templateUrl: './registro-operacion.page.html',
@@ -65,11 +66,7 @@ export class RegistroOperacionPage implements OnInit {
     private api: ApiService,
     private toast: ToastController
   ) {
-    addIcons({
-      timeOutline,
-      waterOutline,
-      closeOutline
-    });
+    addIcons({ timeOutline, waterOutline, closeOutline });
   }
 
   async ngOnInit() {
@@ -177,11 +174,7 @@ export class RegistroOperacionPage implements OnInit {
   irACierre() {
     if (!this.bitacoraId) return;
 
-    this.router.navigate(['/cierre'], {
-      replaceUrl: true
-    }).then(() => {
-      window.scrollTo(0, 0);
-    });
+    this.router.navigate(['/cierre'], { replaceUrl: true });
   }
 
   async mostrarToast(mensaje: string, color: string) {

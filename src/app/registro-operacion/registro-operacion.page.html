@@ -61,9 +61,7 @@
               class="delete-btn"
               (click)="eliminarParametro(i)"
               *ngIf="parametros.length > 1">
-
               <ion-icon name="close-outline"></ion-icon>
-
             </ion-button>
           </div>
 
@@ -90,17 +88,20 @@
             Purga de fondo
           </div>
 
-          <ion-segment [(ngModel)]="purgaDeFondo">
-            <ion-segment-button value="SI">
-              <ion-label>SI</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="NO">
-              <ion-label>NO</ion-label>
-            </ion-segment-button>
-          </ion-segment>
+          <div class="purga-segment-wrapper">
+            <ion-segment [(ngModel)]="purgaDeFondo">
+              <ion-segment-button value="SI">
+                <ion-label>SI</ion-label>
+              </ion-segment-button>
+
+              <ion-segment-button value="NO">
+                <ion-label>NO</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
         </div>
 
-      </div>
+      </div> <!-- FIN main-grid -->
 
       <!-- AGREGAR PARAMETRO -->
       <div class="add-param">
@@ -120,7 +121,7 @@
         </ion-button>
       </div>
 
-    </div>
+    </div> <!-- FIN card FORM -->
 
     <!-- REGISTROS -->
     <div class="card">
@@ -153,7 +154,7 @@
         </div>
 
       </div>
-    </div>
+    </div> <!-- FIN card REGISTROS -->
 
   </div>
 </ion-content>
