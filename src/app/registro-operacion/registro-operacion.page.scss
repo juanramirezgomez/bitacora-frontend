@@ -62,9 +62,6 @@
 /* ================= CARD ================= */
 
 .card {
-  position: relative;
-  z-index: 1;
-
   max-width: 1350px;
   margin: 0 auto 32px;
   padding: 32px;
@@ -98,9 +95,6 @@
 /* ================= PARAM CARD ================= */
 
 .param-card {
-  position: relative;
-  z-index: 1;
-
   background: linear-gradient(
     145deg,
     rgba(255,255,255,0.05),
@@ -182,9 +176,6 @@
 /* ================= PURGA ================= */
 
 .purga-card {
-  position: relative;
-  z-index: 1;
-
   background: linear-gradient(
     145deg,
     rgba(255,255,255,0.05),
@@ -203,20 +194,24 @@
   margin-bottom: 14px;
 }
 
-/* 🔥 FIX DEFINITIVO SEGMENT */
+/* 🔥 SEGMENT CORREGIDO VISUALMENTE */
 
 ion-segment {
-  position: relative;
-  z-index: 10;
-  pointer-events: auto !important;
-
+  margin-top: 8px;
   border-radius: 16px;
-  --background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  padding: 4px;
+
+  --background: rgba(255,255,255,0.05);
+  --indicator-color: #00d2ff;
 }
 
 ion-segment-button {
-  pointer-events: auto !important;
+  --color: rgba(255,255,255,0.7);
+  --color-checked: #ffffff;
+  --background-checked: linear-gradient(90deg,#6a11cb,#00d2ff);
+
+  border-radius: 12px;
+  font-weight: 600;
   cursor: pointer;
 }
 
