@@ -1,10 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { ApiService } from '../services/api';
+
+import {
+  IonContent,
+  IonInput,
+  IonButton,
+  IonIcon,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
@@ -12,7 +22,17 @@ import { timeOutline, waterOutline, closeOutline } from 'ionicons/icons';
 @Component({
   selector: 'app-registro-operacion',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonInput,
+    IonButton,
+    IonIcon,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel
+  ],
   templateUrl: './registro-operacion.page.html',
   styleUrls: ['./registro-operacion.page.scss'],
 })
@@ -27,7 +47,6 @@ export class RegistroOperacionPage implements OnInit {
   purgaDeFondo: 'SI' | 'NO' = 'NO';
 
   editId: string | null = null;
-
   registros: any[] = [];
 
   parametros: any[] = [
@@ -46,13 +65,11 @@ export class RegistroOperacionPage implements OnInit {
     private api: ApiService,
     private toast: ToastController
   ) {
-
     addIcons({
       timeOutline,
       waterOutline,
       closeOutline
     });
-
   }
 
   async ngOnInit() {
@@ -157,9 +174,7 @@ export class RegistroOperacionPage implements OnInit {
     this.purgaDeFondo = 'NO';
   }
 
-  /* 🔥 REDIRECCIÓN CORREGIDA */
   irACierre() {
-
     if (!this.bitacoraId) return;
 
     this.router.navigate(['/cierre'], {
@@ -167,7 +182,6 @@ export class RegistroOperacionPage implements OnInit {
     }).then(() => {
       window.scrollTo(0, 0);
     });
-
   }
 
   async mostrarToast(mensaje: string, color: string) {
@@ -183,5 +197,4 @@ export class RegistroOperacionPage implements OnInit {
     await this.storage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
-
 }
