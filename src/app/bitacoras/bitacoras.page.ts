@@ -68,6 +68,10 @@ export class BitacorasPage implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
+  // ===================================================
+  // INIT
+  // ===================================================
+
   async ngOnInit() {
     await this.storage.create();
     this.session = await this.storage.get('session');
@@ -80,18 +84,24 @@ export class BitacorasPage implements OnInit {
     this.cargarBitacoras();
   }
 
-  // ============================================
-  // 🔥 CARGAR BITÁCORAS (ARREGLADO)
-  // ============================================
+  // ===================================================
+  // CARGAR BITÁCORAS
+  // ===================================================
 
   cargarBitacoras() {
+    console.log("🔥 Ejecutando cargarBitacoras()");
+
     this.cargando = true;
 
     this.api.listarBitacoras({ estado: 'CERRADA' }).subscribe({
       next: (resp: any) => {
 
-        // ✅ Forzamos que sea array real
+        console.log("📦 Respuesta backend:", resp);
+
+        // Aseguramos que sea array
         this.bitacoras = Array.isArray(resp) ? resp : [];
+
+        console.log("📊 Bitácoras recibidas:", this.bitacoras.length);
 
         this.totalCerradas = this.bitacoras.length;
 
@@ -100,16 +110,17 @@ export class BitacorasPage implements OnInit {
 
         this.cargando = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error("❌ Error cargando bitácoras:", err);
         this.errorMsg = 'Error cargando bitácoras';
         this.cargando = false;
       }
     });
   }
 
-  // ============================================
+  // ===================================================
   // FILTROS
-  // ============================================
+  // ===================================================
 
   aplicarFiltros() {
     let filtradas = [...this.bitacoras];
@@ -161,9 +172,9 @@ export class BitacorasPage implements OnInit {
     return item._id;
   }
 
-  // ============================================
+  // ===================================================
   // PDF
-  // ============================================
+  // ===================================================
 
   verPdf(bitacora: any) {
     if (!bitacora?._id) return;
@@ -183,7 +194,10 @@ export class BitacorasPage implements OnInit {
         this.pdfUrl =
           this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPdfUrl);
       },
-      error: () => alert('Error generando PDF')
+      error: (err) => {
+        console.error("❌ Error generando PDF:", err);
+        alert('Error generando PDF');
+      }
     });
   }
 
@@ -224,6 +238,10 @@ export class BitacorasPage implements OnInit {
       window.URL.revokeObjectURL(url);
     });
   }
+
+  // ===================================================
+  // LOGOUT
+  // ===================================================
 
   async salir() {
     await this.storage.remove('session');

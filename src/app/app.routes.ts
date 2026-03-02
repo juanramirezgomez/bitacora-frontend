@@ -5,14 +5,18 @@ import { roleGuard } from './guards/role.guard';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
+  // ========================
   // LOGIN
+  // ========================
   {
     path: 'login',
     loadComponent: () =>
       import('./login/login.page').then(m => m.LoginPage),
   },
 
+  // ========================
   // OPERADOR
+  // ========================
   {
     path: 'home',
     canMatch: [authGuard, roleGuard],
@@ -43,17 +47,21 @@ export const routes: Routes = [
       import('./cierre/cierre.page').then(m => m.CierrePage),
   },
 
-  // SUPERVISOR
+  // ========================
+  // BITÁCORAS (SUPERVISOR + OPERADOR)
+  // ========================
   {
     path: 'bitacoras',
     canMatch: [authGuard, roleGuard],
-    data: { roles: ['SUPERVISOR'] },
+    data: { roles: ['SUPERVISOR', 'OPERADOR'] },
     loadComponent: () =>
       import('./bitacoras/bitacoras.page')
         .then(m => m.BitacorasPage),
   },
 
+  // ========================
   // ADMIN
+  // ========================
   {
     path: 'admin-users',
     canMatch: [authGuard, roleGuard],
@@ -63,6 +71,8 @@ export const routes: Routes = [
         .then(m => m.AdminUsersPage),
   },
 
+  // ========================
   // WILDCARD
+  // ========================
   { path: '**', redirectTo: 'login' },
 ];
