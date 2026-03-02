@@ -1,17 +1,41 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IonicModule, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { ApiService } from '../services/api';
+import { ToastController } from '@ionic/angular';
+
+import {
+  IonContent,
+  IonButton,
+  IonInput,
+  IonTextarea,
+  IonItem,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  IonIcon
+} from '@ionic/angular/standalone';
 
 type SiNo = 'SI' | 'NO';
 
 @Component({
   selector: 'app-cierre',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonButton,
+    IonInput,
+    IonTextarea,
+    IonItem,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel,
+    IonIcon
+  ],
   templateUrl: './cierre.page.html',
   styleUrls: ['./cierre.page.scss'],
 })
@@ -20,7 +44,6 @@ export class CierrePage implements OnInit {
   session: any = null;
   bitacoraId: string | null = null;
 
-  // FORMULARIO
   recepcionCombustible: SiNo = 'NO';
   litrosCombustible: number | null = null;
 
@@ -29,7 +52,6 @@ export class CierrePage implements OnInit {
 
   comentariosFinales = '';
 
-  // FIRMA
   @ViewChild('sigCanvas', { static: false })
   sigCanvas?: ElementRef<HTMLCanvasElement>;
 
@@ -46,42 +68,22 @@ export class CierrePage implements OnInit {
     private toast: ToastController
   ) {}
 
-  // =====================================================
-  // INIT
-  // =====================================================
-
   async ngOnInit() {
     await this.storage.create();
 
     this.session = await this.storage.get('session');
     this.bitacoraId = await this.storage.get('bitacoraId');
 
-    const token = this.session?.token;
-    const rol = String(this.session?.user?.rol || '').toUpperCase();
-
-    if (!token) {
+    if (!this.session?.token || !this.bitacoraId) {
       await this.router.navigateByUrl('/login', { replaceUrl: true });
-      return;
-    }
-
-    if (rol !== 'OPERADOR') {
-      await this.router.navigateByUrl('/login', { replaceUrl: true });
-      return;
-    }
-
-    if (!this.bitacoraId) {
-      await this.router.navigateByUrl('/home', { replaceUrl: true });
-      return;
     }
   }
+
+  // ================= FIRMA =================
 
   ionViewDidEnter() {
     this.initCanvas();
   }
-
-  // =====================================================
-  // FIRMA
-  // =====================================================
 
   private initCanvas() {
     const canvas = this.sigCanvas?.nativeElement;
@@ -138,9 +140,7 @@ export class CierrePage implements OnInit {
     return canvas.toDataURL('image/png');
   }
 
-  // =====================================================
-  // VALIDACIONES Y CIERRE
-  // =====================================================
+  // ================= CIERRE =================
 
   async cerrarTurno() {
 
@@ -148,7 +148,6 @@ export class CierrePage implements OnInit {
 
     this.errorMsg = null;
 
-    // VALIDACIONES FORMULARIO
     if (this.recepcionCombustible === 'SI' && !this.litrosCombustible) {
       this.errorMsg = 'Debes ingresar litros de combustible.';
       return;
@@ -160,36 +159,10 @@ export class CierrePage implements OnInit {
         return;
       }
       if (this.tk28Porcentaje < 0 || this.tk28Porcentaje > 100) {
-        this.errorMsg = 'El % del TK-28 debe estar entre 0 y 100.';
+        this.errorMsg = 'El % debe estar entre 0 y 100.';
         return;
       }
     }
-
-    // 🔥 VALIDAR QUE EXISTAN REGISTROS DE OPERACIÓN
-    this.api.listarRegistroOperacion(this.bitacoraId).subscribe({
-      next: (registros: any[]) => {
-
-        if (!registros || registros.length === 0) {
-          this.errorMsg = 'Debes ingresar al menos un registro de operación antes de cerrar el turno.';
-          return;
-        }
-
-        // Si pasa validación → cerrar
-        this.enviarCierre();
-      },
-      error: () => {
-        this.errorMsg = 'Error validando registros de operación.';
-      }
-    });
-  }
-
-  // =====================================================
-  // ENVÍO REAL AL BACKEND
-  // =====================================================
-
-  private enviarCierre() {
-
-    if (!this.bitacoraId) return;
 
     this.guardando = true;
 
@@ -207,7 +180,6 @@ export class CierrePage implements OnInit {
     };
 
     this.api.crearCierre(this.bitacoraId, payload).subscribe({
-
       next: async () => {
 
         this.guardando = false;
@@ -215,33 +187,23 @@ export class CierrePage implements OnInit {
         const t = await this.toast.create({
           message: 'Turno cerrado correctamente ✅',
           duration: 1500,
-          position: 'top',
           color: 'success'
         });
+
         await t.present();
 
-        // 🔥 Limpiar turno activo
         await this.storage.remove('bitacoraId');
-
-        // 🔥 Redirigir a bitácoras
         await this.router.navigate(['/bitacoras'], { replaceUrl: true });
       },
-
-      error: (err) => {
+      error: () => {
         this.guardando = false;
-        this.errorMsg =
-          err?.error?.message || 'Error cerrando turno';
+        this.errorMsg = 'Error cerrando turno';
       }
     });
   }
 
-  // =====================================================
-  // LOGOUT
-  // =====================================================
-
   async salir() {
-    await this.storage.remove('session');
-    await this.storage.remove('bitacoraId');
-    await this.router.navigateByUrl('/login', { replaceUrl: true });
+    await this.storage.clear();
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 }
