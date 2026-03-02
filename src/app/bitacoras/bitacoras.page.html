@@ -12,19 +12,6 @@
       <ion-button fill="clear" (click)="salir()">SALIR</ion-button>
     </div>
 
-    <!-- STATS -->
-    <div class="stats-bar">
-      <div class="stat">
-        <strong>{{ totalCerradas }}</strong>
-        <span>Bitácoras cerradas</span>
-      </div>
-
-      <div class="stat">
-        <strong>{{ totalFiltradas }}</strong>
-        <span>Mostradas</span>
-      </div>
-    </div>
-
     <!-- BUSCADOR -->
     <div class="search-box">
       <ion-input
@@ -98,22 +85,26 @@
 
     <!-- PAGINACIÓN -->
     <div class="pagination" *ngIf="totalFiltradas > 0">
-      <ion-button size="small" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      <ion-button
+        size="small"
+        (click)="paginaAnterior()"
+        [disabled]="paginaActual === 1">
         Anterior
       </ion-button>
 
       <span>Página {{ paginaActual }}</span>
 
-      <ion-button size="small"
-                  (click)="paginaSiguiente()"
-                  [disabled]="(paginaActual * porPagina) >= totalFiltradas">
+      <ion-button
+        size="small"
+        (click)="paginaSiguiente()"
+        [disabled]="(paginaActual * porPagina) >= totalFiltradas">
         Siguiente
       </ion-button>
     </div>
 
   </div>
 
-  <!-- MODAL PDF FULLSCREEN REAL -->
+  <!-- MODAL PDF FULLSCREEN -->
   <ion-modal
     [isOpen]="mostrarModal"
     (didDismiss)="cerrarModal()"
@@ -142,11 +133,17 @@
           </div>
 
           <div class="pdf-actions">
-            <ion-button size="small" fill="outline" (click)="descargarPdf(bitacoraSeleccionada)">
+            <ion-button
+              size="small"
+              fill="outline"
+              (click)="descargarPdf(bitacoraSeleccionada)">
               Descargar PDF
             </ion-button>
 
-            <ion-button size="small" color="danger" (click)="cerrarModal()">
+            <ion-button
+              size="small"
+              color="danger"
+              (click)="cerrarModal()">
               <ion-icon name="close-outline"></ion-icon>
               Salir
             </ion-button>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -65,7 +65,8 @@ export class BitacorasPage implements OnInit {
     private api: ApiService,
     private storage: Storage,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cd: ChangeDetectorRef
   ) {}
 
   // ===================================================
@@ -98,15 +99,15 @@ export class BitacorasPage implements OnInit {
 
         console.log("📦 Respuesta backend:", resp);
 
-        // Aseguramos que sea array
         this.bitacoras = Array.isArray(resp) ? resp : [];
-
-        console.log("📊 Bitácoras recibidas:", this.bitacoras.length);
 
         this.totalCerradas = this.bitacoras.length;
 
         this.paginaActual = 1;
         this.aplicarFiltros();
+
+        // 🔥 Forzar actualización visual
+        this.cd.detectChanges();
 
         this.cargando = false;
       },
