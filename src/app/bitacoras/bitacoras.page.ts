@@ -80,16 +80,24 @@ export class BitacorasPage implements OnInit {
     this.cargarBitacoras();
   }
 
+  // ============================================
+  // 🔥 CARGAR BITÁCORAS (ARREGLADO)
+  // ============================================
+
   cargarBitacoras() {
     this.cargando = true;
 
     this.api.listarBitacoras({ estado: 'CERRADA' }).subscribe({
       next: (resp: any) => {
-        const items = resp?.items || resp || [];
-        this.bitacoras = items;
+
+        // ✅ Forzamos que sea array real
+        this.bitacoras = Array.isArray(resp) ? resp : [];
+
         this.totalCerradas = this.bitacoras.length;
+
         this.paginaActual = 1;
         this.aplicarFiltros();
+
         this.cargando = false;
       },
       error: () => {
@@ -98,6 +106,10 @@ export class BitacorasPage implements OnInit {
       }
     });
   }
+
+  // ============================================
+  // FILTROS
+  // ============================================
 
   aplicarFiltros() {
     let filtradas = [...this.bitacoras];
@@ -149,14 +161,9 @@ export class BitacorasPage implements OnInit {
     return item._id;
   }
 
-  private generarNombre(bitacora: any, extension: string) {
-    const fecha = new Date(bitacora.fechaInicio);
-    const dia = String(fecha.getDate()).padStart(2, '0');
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const anio = String(fecha.getFullYear()).slice(-2);
-    const turno = (bitacora.turno || '').toLowerCase();
-    return `bitacora-${dia}-${mes}-${anio}-${turno}.${extension}`;
-  }
+  // ============================================
+  // PDF
+  // ============================================
 
   verPdf(bitacora: any) {
     if (!bitacora?._id) return;
@@ -167,12 +174,14 @@ export class BitacorasPage implements OnInit {
 
     this.api.descargarPdf(bitacora._id).subscribe({
       next: (blob: Blob) => {
+
         if (this.rawPdfUrl) {
           window.URL.revokeObjectURL(this.rawPdfUrl);
         }
 
         this.rawPdfUrl = window.URL.createObjectURL(blob);
-        this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPdfUrl);
+        this.pdfUrl =
+          this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPdfUrl);
       },
       error: () => alert('Error generando PDF')
     });
@@ -193,30 +202,26 @@ export class BitacorasPage implements OnInit {
   descargarPdf(bitacora: any) {
     if (!bitacora?._id) return;
 
-    this.api.descargarPdf(bitacora._id).subscribe({
-      next: (blob: Blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = this.generarNombre(bitacora, 'pdf');
-        a.click();
-        window.URL.revokeObjectURL(url);
-      }
+    this.api.descargarPdf(bitacora._id).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bitacora.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     });
   }
 
   descargarExcel(bitacora: any) {
     if (!bitacora?._id) return;
 
-    this.api.descargarExcel(bitacora._id).subscribe({
-      next: (blob: Blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = this.generarNombre(bitacora, 'xlsx');
-        a.click();
-        window.URL.revokeObjectURL(url);
-      }
+    this.api.descargarExcel(bitacora._id).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bitacora.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     });
   }
 
