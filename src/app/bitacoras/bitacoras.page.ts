@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -7,10 +6,34 @@ import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
+import {
+  IonContent,
+  IonButton,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonModal,
+  IonDatetime,
+  IonDatetimeButton,
+  IonIcon
+} from '@ionic/angular/standalone';
+
 @Component({
   selector: 'app-bitacoras',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonButton,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonModal,
+    IonDatetime,
+    IonDatetimeButton,
+    IonIcon
+  ],
   templateUrl: './bitacoras.page.html',
   styleUrls: ['./bitacoras.page.scss'],
 })
@@ -24,7 +47,7 @@ export class BitacorasPage implements OnInit {
   totalCerradas = 0;
   totalFiltradas = 0;
 
-  searchText: string = '';
+  searchText = '';
   fechaFiltro: string | null = null;
 
   paginaActual = 1;
@@ -33,11 +56,9 @@ export class BitacorasPage implements OnInit {
   cargando = false;
   errorMsg: string | null = null;
 
-  // Modal PDF
   mostrarModal = false;
   pdfUrl: SafeResourceUrl | null = null;
   private rawPdfUrl: string | null = null;
-
   bitacoraSeleccionada: any | null = null;
 
   constructor(
@@ -59,10 +80,6 @@ export class BitacorasPage implements OnInit {
     this.cargarBitacoras();
   }
 
-  // ================================
-  // CARGAR BITÁCORAS (solo cerradas)
-  // ================================
-
   cargarBitacoras() {
     this.cargando = true;
 
@@ -70,12 +87,9 @@ export class BitacorasPage implements OnInit {
       next: (resp: any) => {
         const items = resp?.items || resp || [];
         this.bitacoras = items;
-
         this.totalCerradas = this.bitacoras.length;
-
         this.paginaActual = 1;
         this.aplicarFiltros();
-
         this.cargando = false;
       },
       error: () => {
@@ -84,10 +98,6 @@ export class BitacorasPage implements OnInit {
       }
     });
   }
-
-  // ================================
-  // FILTROS
-  // ================================
 
   aplicarFiltros() {
     let filtradas = [...this.bitacoras];
@@ -139,28 +149,14 @@ export class BitacorasPage implements OnInit {
     return item._id;
   }
 
-  // ================================
-  // NOMBRE BONITO (ya lo tienes)
-  // ================================
-
   private generarNombre(bitacora: any, extension: string) {
     const fecha = new Date(bitacora.fechaInicio);
-
     const dia = String(fecha.getDate()).padStart(2, '0');
     const mes = String(fecha.getMonth() + 1).padStart(2, '0');
     const anio = String(fecha.getFullYear()).slice(-2);
     const turno = (bitacora.turno || '').toLowerCase();
-
-    const cierre = bitacora.fechaCierre ? new Date(bitacora.fechaCierre) : null;
-    const hh = cierre ? String(cierre.getHours()).padStart(2, '0') : '00';
-    const mm = cierre ? String(cierre.getMinutes()).padStart(2, '0') : '00';
-
-    return `bitacora-${dia}-${mes}-${anio}-${turno}-${hh}${mm}.${extension}`;
+    return `bitacora-${dia}-${mes}-${anio}-${turno}.${extension}`;
   }
-
-  // ================================
-  // PDF
-  // ================================
 
   verPdf(bitacora: any) {
     if (!bitacora?._id) return;
@@ -171,15 +167,11 @@ export class BitacorasPage implements OnInit {
 
     this.api.descargarPdf(bitacora._id).subscribe({
       next: (blob: Blob) => {
-
         if (this.rawPdfUrl) {
           window.URL.revokeObjectURL(this.rawPdfUrl);
-          this.rawPdfUrl = null;
         }
 
-        // ✅ page-width se ve grande y pro
-        this.rawPdfUrl = window.URL.createObjectURL(blob) + '#toolbar=1&navpanes=0&scrollbar=1&zoom=page-width';
-
+        this.rawPdfUrl = window.URL.createObjectURL(blob);
         this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPdfUrl);
       },
       error: () => alert('Error generando PDF')
@@ -207,18 +199,11 @@ export class BitacorasPage implements OnInit {
         const a = document.createElement('a');
         a.href = url;
         a.download = this.generarNombre(bitacora, 'pdf');
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-      },
-      error: () => alert('Error descargando PDF')
+      }
     });
   }
-
-  // ================================
-  // EXCEL
-  // ================================
 
   descargarExcel(bitacora: any) {
     if (!bitacora?._id) return;
@@ -229,18 +214,11 @@ export class BitacorasPage implements OnInit {
         const a = document.createElement('a');
         a.href = url;
         a.download = this.generarNombre(bitacora, 'xlsx');
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-      },
-      error: () => alert('Error generando Excel')
+      }
     });
   }
-
-  // ================================
-  // LOGOUT
-  // ================================
 
   async salir() {
     await this.storage.remove('session');
