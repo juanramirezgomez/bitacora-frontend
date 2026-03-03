@@ -1,3 +1,18 @@
 <ion-app>
+
+  <!-- 🔴 BARRA OFFLINE -->
+  <div *ngIf="!isOnline"
+       style="
+        background:#dc2626;
+        color:white;
+        text-align:center;
+        padding:6px;
+        font-size:13px;
+        font-weight:bold;
+        z-index:9999;">
+    🔴 MODO OFFLINE — Los datos se guardarán localmente
+  </div>
+
   <ion-router-outlet></ion-router-outlet>
+
 </ion-app>

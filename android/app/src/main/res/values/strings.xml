@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Bitacora Caldera</string>
+    <string name="title_activity_main">Bitacora Caldera</string>
+    <string name="package_name">com.jotaraa.bitacora</string>
+    <string name="custom_url_scheme">com.jotaraa.bitacora</string>
+</resources>
