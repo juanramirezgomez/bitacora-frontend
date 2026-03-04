@@ -104,15 +104,32 @@ export class ApiService {
   // ========================================
 
   guardarChecklistInicial(bitacoraId: string, data: any): Observable<any> {
-    return this.authRequest(headers =>
-      this.http.post(
-        `${this.baseUrl}/api/bitacoras/${bitacoraId}/checklist-inicial`,
-        data,
-        { headers }
-      )
+
+  // 📴 SI NO HAY INTERNET → GUARDAR LOCAL
+  if (!navigator.onLine) {
+
+    const localKey = `offline-checklist-${bitacoraId}`;
+
+    return from(
+      this.storage.set(localKey, data)
+    ).pipe(
+      map(() => ({
+        offline: true,
+        message: 'Guardado localmente'
+      }))
     );
   }
 
+  // 🌐 SI HAY INTERNET → POST NORMAL
+  return this.authRequest(headers =>
+    this.http.post(
+      `${this.baseUrl}/api/bitacoras/${bitacoraId}/checklist-inicial`,
+      data,
+      { headers }
+    )
+  );
+} 
+  
   obtenerChecklistInicial(bitacoraId: string): Observable<any> {
     return this.authRequest(headers =>
       this.http.get(
@@ -201,7 +218,7 @@ export class ApiService {
   descargarPdf(bitacoraId: string): Observable<Blob> {
     return this.authRequest(headers =>
       this.http.get(
-        `${this.baseUrl}/api/bitacoras/${bitacoraId}/reporte.pdf`,
+        `${this.baseUrl}/api/reportes/${bitacoraId}/reporte.pdf`,
         {
           headers,
           responseType: 'blob'
@@ -217,7 +234,7 @@ export class ApiService {
   descargarExcel(bitacoraId: string): Observable<Blob> {
     return this.authRequest(headers =>
       this.http.get(
-        `${this.baseUrl}/api/bitacoras/${bitacoraId}/reporte.excel`,
+        `${this.baseUrl}/api/reportes/${bitacoraId}/reporte.excel`,
         {
           headers,
           responseType: 'blob'

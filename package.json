@@ -25,6 +25,7 @@
     "@angular/router": "^20.0.0",
     "@capacitor/android": "^8.1.0",
     "@capacitor/app": "latest",
+    "@capacitor/browser": "^8.0.1",
     "@capacitor/core": "^8.1.0",
     "@capacitor/haptics": "latest",
     "@capacitor/keyboard": "latest",

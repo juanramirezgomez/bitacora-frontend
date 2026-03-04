@@ -8,7 +8,6 @@
         <div class="name">{{ session?.user?.nombre }}</div>
         <div class="role">Rol: {{ session?.user?.rol }}</div>
       </div>
-
       <ion-button fill="clear" (click)="salir()">SALIR</ion-button>
     </div>
 
@@ -103,67 +102,5 @@
     </div>
 
   </div>
-
-  <!-- MODAL PDF FULLSCREEN -->
-  <ion-modal
-    [isOpen]="mostrarModal"
-    (didDismiss)="cerrarModal()"
-    cssClass="pdf-modal"
-    presentation="fullscreen"
-    backdropDismiss="false">
-
-    <ng-template>
-      <div class="pdf-modal-wrapper">
-
-        <div class="pdf-modal-header">
-          <div class="pdf-title">
-            <h2>Vista previa del reporte</h2>
-
-            <div class="pdf-sub" *ngIf="bitacoraSeleccionada">
-              <span class="pill">{{ bitacoraSeleccionada.operador }}</span>
-              <span class="dot">•</span>
-              <span class="pill pill-blue">
-                {{ bitacoraSeleccionada.turno }}-{{ bitacoraSeleccionada.turnoNumero }}
-              </span>
-              <span class="dot">•</span>
-              <span class="pill pill-muted">
-                {{ bitacoraSeleccionada.fechaCierre | date:'short' }}
-              </span>
-            </div>
-          </div>
-
-          <div class="pdf-actions">
-            <ion-button
-              size="small"
-              fill="outline"
-              (click)="descargarPdf(bitacoraSeleccionada)">
-              Descargar PDF
-            </ion-button>
-
-            <ion-button
-              size="small"
-              color="danger"
-              (click)="cerrarModal()">
-              <ion-icon name="close-outline"></ion-icon>
-              Salir
-            </ion-button>
-          </div>
-        </div>
-
-        <div class="pdf-modal-content">
-          <iframe
-            *ngIf="pdfUrl"
-            [src]="pdfUrl"
-            class="pdf-frame-modern">
-          </iframe>
-
-          <div class="pdf-loading" *ngIf="!pdfUrl">
-            Cargando PDF…
-          </div>
-        </div>
-
-      </div>
-    </ng-template>
-  </ion-modal>
 
 </ion-content>

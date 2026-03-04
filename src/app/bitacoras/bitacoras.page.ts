@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Browser } from '@capacitor/browser';
 
 import {
   IonContent,
@@ -56,16 +56,10 @@ export class BitacorasPage implements OnInit {
   cargando = false;
   errorMsg: string | null = null;
 
-  mostrarModal = false;
-  pdfUrl: SafeResourceUrl | null = null;
-  private rawPdfUrl: string | null = null;
-  bitacoraSeleccionada: any | null = null;
-
   constructor(
     private api: ApiService,
     private storage: Storage,
     private router: Router,
-    private sanitizer: DomSanitizer,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -90,14 +84,10 @@ export class BitacorasPage implements OnInit {
   // ===================================================
 
   cargarBitacoras() {
-    console.log("🔥 Ejecutando cargarBitacoras()");
-
     this.cargando = true;
 
     this.api.listarBitacoras({ estado: 'CERRADA' }).subscribe({
       next: (resp: any) => {
-
-        console.log("📦 Respuesta backend:", resp);
 
         this.bitacoras = Array.isArray(resp) ? resp : [];
 
@@ -106,7 +96,6 @@ export class BitacorasPage implements OnInit {
         this.paginaActual = 1;
         this.aplicarFiltros();
 
-        // 🔥 Forzar actualización visual
         this.cd.detectChanges();
 
         this.cargando = false;
@@ -174,70 +163,31 @@ export class BitacorasPage implements OnInit {
   }
 
   // ===================================================
-  // PDF
+  // PDF / EXCEL (ANDROID READY)
   // ===================================================
 
-  verPdf(bitacora: any) {
+  async verPdf(bitacora: any) {
     if (!bitacora?._id) return;
 
-    this.bitacoraSeleccionada = bitacora;
-    this.mostrarModal = true;
-    this.pdfUrl = null;
+    const url = `https://bitacora-backend-vb0e.onrender.com/api/bitacoras/${bitacora._id}/reporte.pdf`;
 
-    this.api.descargarPdf(bitacora._id).subscribe({
-      next: (blob: Blob) => {
-
-        if (this.rawPdfUrl) {
-          window.URL.revokeObjectURL(this.rawPdfUrl);
-        }
-
-        this.rawPdfUrl = window.URL.createObjectURL(blob);
-        this.pdfUrl =
-          this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPdfUrl);
-      },
-      error: (err) => {
-        console.error("❌ Error generando PDF:", err);
-        alert('Error generando PDF');
-      }
-    });
+    await Browser.open({ url });
   }
 
-  cerrarModal() {
-    this.mostrarModal = false;
-
-    if (this.rawPdfUrl) {
-      window.URL.revokeObjectURL(this.rawPdfUrl);
-      this.rawPdfUrl = null;
-    }
-
-    this.pdfUrl = null;
-    this.bitacoraSeleccionada = null;
-  }
-
-  descargarPdf(bitacora: any) {
+  async descargarPdf(bitacora: any) {
     if (!bitacora?._id) return;
 
-    this.api.descargarPdf(bitacora._id).subscribe(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `bitacora.pdf`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
+    const url = `https://bitacora-backend-vb0e.onrender.com/api/bitacoras/${bitacora._id}/reporte.pdf`;
+
+    await Browser.open({ url });
   }
 
-  descargarExcel(bitacora: any) {
+  async descargarExcel(bitacora: any) {
     if (!bitacora?._id) return;
 
-    this.api.descargarExcel(bitacora._id).subscribe(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `bitacora.xlsx`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
+    const url = `https://bitacora-backend-vb0e.onrender.com/api/bitacoras/${bitacora._id}/reporte.excel`;
+
+    await Browser.open({ url });
   }
 
   // ===================================================
@@ -248,4 +198,5 @@ export class BitacorasPage implements OnInit {
     await this.storage.remove('session');
     await this.router.navigateByUrl('/login', { replaceUrl: true });
   }
+
 }

@@ -18,10 +18,13 @@ type NivelAgua = 'BAJO' | 'NORMAL' | 'LLENO';
 })
 export class ChecklistPage implements OnInit {
 
+  // ============================
+  // PROPIEDADES
+  // ============================
+
   session: any = null;
   bitacoraId: string | null = null;
 
-  // 🔥 Checklist campos (INICIALMENTE DESELECCIONADOS)
   condicionEquipo: ServicioEstado | null = null;
   calderaHurst: ServicioEstado | null = null;
   bombaAlimentacionAgua: ServicioEstado | null = null;
@@ -44,44 +47,47 @@ export class ChecklistPage implements OnInit {
     private toast: ToastController
   ) {}
 
-  // ============================================
+  // ============================
   // INIT
-  // ============================================
+  // ============================
 
   async ngOnInit() {
+
     await this.storage.create();
 
     this.session = await this.storage.get('session');
     this.bitacoraId = await this.storage.get('bitacoraId');
 
-    // 🔒 Validar sesión
+    // Validar sesión
     if (!this.session?.token) {
       await this.router.navigateByUrl('/login', { replaceUrl: true });
       return;
     }
 
-    // 🔒 Validar bitácora activa
+    // Validar bitácora activa
     if (!this.bitacoraId) {
       await this.router.navigateByUrl('/home', { replaceUrl: true });
       return;
     }
 
-    // 🔥 RESET VISUAL DEL CHECKLIST (CLAVE)
+    // Reset visual
     this.resetChecklist();
 
-    // 🔍 Validar que la bitácora exista
-    this.api.getBitacoraById(this.bitacoraId).subscribe({
-      next: () => {},
-      error: async () => {
-        await this.storage.remove('bitacoraId');
-        await this.router.navigateByUrl('/home', { replaceUrl: true });
-      }
-    });
+    // Validar backend SOLO si hay internet
+    if (navigator.onLine) {
+      this.api.getBitacoraById(this.bitacoraId).subscribe({
+        next: () => {},
+        error: async () => {
+          await this.storage.remove('bitacoraId');
+          await this.router.navigateByUrl('/home', { replaceUrl: true });
+        }
+      });
+    }
   }
 
-  // ============================================
+  // ============================
   // RESET CHECKLIST
-  // ============================================
+  // ============================
 
   private resetChecklist() {
     this.condicionEquipo = null;
@@ -97,13 +103,13 @@ export class ChecklistPage implements OnInit {
     this.errorMsg = null;
   }
 
-  // ============================================
+  // ============================
   // TOAST
-  // ============================================
+  // ============================
 
-  private async toastOk(msg: string) {
+  private async toastOk(message: string) {
     const t = await this.toast.create({
-      message: msg,
+      message,
       duration: 1500,
       position: 'top',
       color: 'success'
@@ -111,14 +117,14 @@ export class ChecklistPage implements OnInit {
     await t.present();
   }
 
-  // ============================================
+  // ============================
   // GUARDAR CHECKLIST
-  // ============================================
+  // ============================
 
   guardarChecklist() {
+
     if (!this.bitacoraId) return;
 
-    // 🔴 Validación mínima (opcional pero recomendada)
     if (
       !this.condicionEquipo ||
       !this.calderaHurst ||
@@ -151,21 +157,28 @@ export class ChecklistPage implements OnInit {
     };
 
     this.api.guardarChecklistInicial(this.bitacoraId, payload).subscribe({
-      next: async () => {
+      next: async (resp: any) => {
+
         this.guardando = false;
-        await this.toastOk('Checklist guardado correctamente ✅');
+
+        if (resp?.offline) {
+          await this.toastOk('📴 Guardado offline (se sincronizará luego)');
+        } else {
+          await this.toastOk('Checklist guardado correctamente ✅');
+        }
+
         await this.router.navigateByUrl('/registro-operacion', { replaceUrl: true });
       },
-      error: (err) => {
+      error: () => {
         this.guardando = false;
-        this.errorMsg = err?.error?.message || 'Error guardando checklist';
+        this.errorMsg = 'Error guardando checklist';
       }
     });
   }
 
-  // ============================================
+  // ============================
   // VOLVER
-  // ============================================
+  // ============================
 
   async volver() {
     await this.router.navigateByUrl('/home', { replaceUrl: true });
