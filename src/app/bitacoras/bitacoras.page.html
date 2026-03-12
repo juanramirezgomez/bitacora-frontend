@@ -56,9 +56,8 @@
       </div>
 
       <div class="meta">Operador: {{ b.operador }}</div>
-      <div class="meta">Inicio: {{ b.fechaInicio | date:'short' }}</div>
-      <div class="meta" *ngIf="b.fechaCierre">
-        Cierre: {{ b.fechaCierre | date:'short' }}
+      <div class="meta">
+        Fecha: {{ b.fechaInicio | date:'dd/MM/yyyy' }}
       </div>
 
       <div class="actions">

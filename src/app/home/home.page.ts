@@ -32,8 +32,8 @@ export class HomePage implements OnInit {
   turno: string = 'DIA';
   turnoNumero: string = '39';
 
-  // 🔥 NUEVO: Fecha seleccionable
-  fechaBitacora: string = new Date().toISOString();
+  // ✅ Fecha local sin UTC
+  fechaBitacora: string = this.getFechaLocal();
 
   bitacoraAbierta: boolean = false;
   bitacoraId: string | null = null;
@@ -45,6 +45,15 @@ export class HomePage implements OnInit {
     private storage: Storage,
     private router: Router
   ) {}
+
+  // ✅ FUNCIÓN PARA FECHA LOCAL
+  private getFechaLocal(): string {
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = String(hoy.getMonth() + 1).padStart(2, '0');
+    const day = String(hoy.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   async ngOnInit() {
 
@@ -101,7 +110,6 @@ export class HomePage implements OnInit {
 
     this.cargando = true;
 
-    // 🔥 Enviamos también la fecha seleccionada
     this.api.iniciarTurno(
       this.turno,
       this.turnoNumero,
