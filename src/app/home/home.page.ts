@@ -6,7 +6,10 @@ import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonButton,
-  IonDatetime
+  IonDatetime,
+  IonDatetimeButton,
+  IonItem,
+  IonModal
 } from '@ionic/angular/standalone';
 
 import { ApiService } from '../services/api';
@@ -20,7 +23,10 @@ import { Storage } from '@ionic/storage-angular';
     FormsModule,
     IonContent,
     IonButton,
-    IonDatetime
+    IonDatetime,
+    IonDatetimeButton,
+    IonItem,
+    IonModal
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
@@ -32,7 +38,7 @@ export class HomePage implements OnInit {
   turno: string = 'DIA';
   turnoNumero: string = '39';
 
-  // ✅ Fecha local sin UTC
+  // ✅ Fecha inicial local
   fechaBitacora: string = this.getFechaLocal();
 
   bitacoraAbierta: boolean = false;
@@ -46,14 +52,22 @@ export class HomePage implements OnInit {
     private router: Router
   ) {}
 
-  // ✅ FUNCIÓN PARA FECHA LOCAL
+  /* =========================================
+     FECHA LOCAL (YYYY-MM-DD)
+  ========================================= */
+
   private getFechaLocal(): string {
     const hoy = new Date();
     const year = hoy.getFullYear();
     const month = String(hoy.getMonth() + 1).padStart(2, '0');
     const day = String(hoy.getDate()).padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   }
+
+  /* =========================================
+     INIT
+  ========================================= */
 
   async ngOnInit() {
 
@@ -68,6 +82,10 @@ export class HomePage implements OnInit {
 
     this.validarBitacoraAbierta();
   }
+
+  /* =========================================
+     VALIDAR BITÁCORA ABIERTA
+  ========================================= */
 
   validarBitacoraAbierta() {
 
@@ -100,6 +118,10 @@ export class HomePage implements OnInit {
       }
     });
   }
+
+  /* =========================================
+     INICIAR TURNO
+  ========================================= */
 
   iniciarTurno() {
 
@@ -152,6 +174,10 @@ export class HomePage implements OnInit {
     });
   }
 
+  /* =========================================
+     CONTINUAR TURNO
+  ========================================= */
+
   continuarTurno() {
 
     if (!this.bitacoraId) return;
@@ -168,8 +194,13 @@ export class HomePage implements OnInit {
     });
   }
 
+  /* =========================================
+     LOGOUT
+  ========================================= */
+
   async salir() {
     await this.storage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
+
 }
