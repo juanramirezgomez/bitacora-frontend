@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
   turno: string = 'DIA';
   turnoNumero: string = '39';
 
-  fechaBitacora: string = this.getFechaLocal();
+  fechaBitacora: string = '';
 
   bitacoraAbierta: boolean = false;
   bitacoraId: string | null = null;
@@ -47,7 +47,7 @@ export class HomePage implements OnInit {
      FECHA LOCAL
   ========================================= */
 
-  private getFechaLocal(): string {
+  getFechaLocal(): string {
 
     const hoy = new Date();
 
@@ -62,32 +62,24 @@ export class HomePage implements OnInit {
      CAMBIAR TURNO
   ========================================= */
 
-  cambiarTurno(turno: string) {
-    this.turno = turno;
+  cambiarTurno(valor: string) {
+
+    this.turno = valor;
+
   }
 
   /* =========================================
      CAMBIAR NUMERO TURNO
   ========================================= */
 
-  cambiarTurnoNumero(numero: string) {
-    this.turnoNumero = numero;
-  }
+  cambiarTurnoNumero(valor: string) {
 
-  /* =========================================
-     CUANDO CAMBIA LA FECHA
-  ========================================= */
-
-  cambiarFecha(event: any) {
-
-    if (!event?.target?.value) return;
-
-    this.fechaBitacora = event.target.value;
+    this.turnoNumero = valor;
 
   }
 
   /* =========================================
-     FORMATEAR FECHA PARA MOSTRAR
+     FORMATEAR FECHA
   ========================================= */
 
   formatearFecha(fecha: string): string {
@@ -119,6 +111,8 @@ export class HomePage implements OnInit {
       this.router.navigateByUrl('/login', { replaceUrl: true });
       return;
     }
+
+    this.fechaBitacora = this.getFechaLocal();
 
     this.validarBitacoraAbierta();
   }
@@ -239,8 +233,11 @@ export class HomePage implements OnInit {
   ========================================= */
 
   async salir() {
+
     await this.storage.clear();
+
     this.router.navigateByUrl('/login', { replaceUrl: true });
+
   }
 
 }
