@@ -38,16 +38,16 @@
     0 0 70px rgba(64, 220, 255, 0.35);
 }
 
-/* ===== HEADER DENTRO DEL CARD ===== */
+/* ===== HEADER ===== */
 
 .card-header {
   display: flex;
-  justify-content: space-between; /* 🔥 usuario izquierda / salir derecha */
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 35px;
 }
 
-/* ===== USUARIO IZQUIERDA ===== */
+/* ===== USUARIO ===== */
 
 .user-box {
   display: flex;
@@ -90,7 +90,7 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* ===== BOTÓN SALIR DERECHA ===== */
+/* ===== BOTÓN SALIR ===== */
 
 .logout-btn {
   --color: #ffffff;
@@ -133,6 +133,8 @@
   gap: 20px;
 }
 
+/* ===== BOTONES SELECTORES ===== */
+
 .selector-btn {
   flex: 1;
   padding: 16px 0;
@@ -143,7 +145,19 @@
   color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
+
+  /* 🔥 necesario para button */
+  border: none;
+  outline: none;
+  appearance: none;
 }
+
+/* ancho completo */
+.selector-buttons button {
+  width: 100%;
+}
+
+/* activo */
 
 .selector-btn.active {
   background: linear-gradient(135deg, #6f3df4, #23c6d9);
@@ -152,10 +166,23 @@
     0 0 35px rgba(64, 220, 255, 0.5);
 }
 
+/* hover */
+
 .selector-btn:hover {
   box-shadow:
     0 0 15px rgba(118, 91, 255, 0.4),
     0 0 25px rgba(64, 220, 255, 0.3);
+}
+
+/* ===== INPUT FECHA ===== */
+
+.date-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 15px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
 }
 
 /* ===== TURNO INFO ===== */
