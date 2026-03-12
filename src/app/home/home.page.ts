@@ -59,22 +59,31 @@ export class HomePage implements OnInit {
   }
 
   /* =========================================
+     CAMBIAR TURNO
+  ========================================= */
+
+  cambiarTurno(turno: string) {
+    this.turno = turno;
+  }
+
+  /* =========================================
+     CAMBIAR NUMERO TURNO
+  ========================================= */
+
+  cambiarTurnoNumero(numero: string) {
+    this.turnoNumero = numero;
+  }
+
+  /* =========================================
      CUANDO CAMBIA LA FECHA
   ========================================= */
 
   cambiarFecha(event: any) {
 
-    if (!event?.detail?.value) return;
+    if (!event?.target?.value) return;
 
-    const fechaISO = event.detail.value;
+    this.fechaBitacora = event.target.value;
 
-    const fecha = new Date(fechaISO);
-
-    const year = fecha.getFullYear();
-    const month = String(fecha.getMonth() + 1).padStart(2,'0');
-    const day = String(fecha.getDate()).padStart(2,'0');
-
-    this.fechaBitacora = `${year}-${month}-${day}`;
   }
 
   /* =========================================

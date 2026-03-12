@@ -4,101 +4,160 @@
 
     <!-- TOPBAR -->
     <div class="topbar">
+
       <div>
         <div class="name">{{ session?.user?.nombre }}</div>
         <div class="role">Rol: {{ session?.user?.rol }}</div>
       </div>
-      <ion-button fill="clear" (click)="salir()">SALIR</ion-button>
+
+      <ion-button fill="clear" (click)="salir()">
+        SALIR
+      </ion-button>
+
     </div>
 
     <!-- BUSCADOR -->
     <div class="search-box">
+
       <ion-input
         placeholder="Buscar por operador o N° turno..."
         [(ngModel)]="searchText"
         (ionInput)="aplicarFiltros()">
       </ion-input>
+
     </div>
 
     <!-- FILTRO FECHA -->
     <div class="date-filter">
-      <ion-item lines="none">
-        <ion-label>Filtrar por fecha</ion-label>
-        <ion-datetime-button datetime="fechaFiltro"></ion-datetime-button>
-      </ion-item>
 
-      <ion-modal keepContentsMounted="true" cssClass="date-modal">
-        <ng-template>
-          <ion-datetime
-            id="fechaFiltro"
-            presentation="date"
-            [(ngModel)]="fechaFiltro"
-            (ionChange)="aplicarFiltros()">
-          </ion-datetime>
-        </ng-template>
-      </ion-modal>
+      <label class="date-label">
+        Filtrar por fecha
+      </label>
+
+      <input
+        type="date"
+        [(ngModel)]="fechaFiltro"
+        (change)="aplicarFiltros()"
+        class="date-input"
+      />
 
       <div class="date-actions" *ngIf="fechaFiltro">
-        <ion-button size="small" fill="outline" (click)="limpiarFecha()">
+
+        <ion-button
+          size="small"
+          fill="outline"
+          (click)="limpiarFecha()">
+
           Limpiar fecha
+
         </ion-button>
+
       </div>
+
     </div>
 
     <!-- LISTA BITÁCORAS -->
+
     <div
       *ngFor="let b of bitacorasFiltradas; trackBy: trackByBitacora"
       class="card">
 
       <div class="card-title">
+
         <h2>{{ b.turno }} - {{ b.turnoNumero }}</h2>
-        <span class="estado-pill estado-cerrada">CERRADA</span>
+
+        <span class="estado-pill estado-cerrada">
+          CERRADA
+        </span>
+
       </div>
 
-      <div class="meta">Operador: {{ b.operador }}</div>
+      <div class="meta">
+        Operador: {{ b.operador }}
+      </div>
 
       <div class="meta">
         Fecha: {{ formatearFecha(b.fechaInicio) }}
       </div>
 
+      <!-- BOTONES -->
+
       <div class="actions">
-        <ion-button size="small" fill="outline" (click)="verPdf(b)">
+
+        <ion-button
+          size="small"
+          fill="outline"
+          (click)="verPdf(b)">
+
           VISTA PREVIA
+
         </ion-button>
 
-        <ion-button size="small" fill="solid" (click)="descargarPdf(b)">
+        <ion-button
+          size="small"
+          fill="solid"
+          (click)="descargarPdf(b)">
+
           PDF
+
         </ion-button>
 
-        <ion-button size="small" color="success" fill="solid" (click)="descargarExcel(b)">
+        <ion-button
+          size="small"
+          color="success"
+          fill="solid"
+          (click)="descargarExcel(b)">
+
           EXCEL
+
         </ion-button>
+
       </div>
+
     </div>
 
-    <!-- VACÍO -->
-    <div class="empty" *ngIf="!cargando && bitacorasFiltradas.length === 0">
+    <!-- VACIO -->
+
+    <div
+      class="empty"
+      *ngIf="!cargando && bitacorasFiltradas.length === 0">
+
       <h3>No hay bitácoras para mostrar</h3>
-      <p>Prueba cambiando la fecha o el texto de búsqueda.</p>
+
+      <p>
+        Prueba cambiando la fecha o el texto de búsqueda.
+      </p>
+
     </div>
 
-    <!-- PAGINACIÓN -->
-    <div class="pagination" *ngIf="totalFiltradas > 0">
+    <!-- PAGINACION -->
+
+    <div
+      class="pagination"
+      *ngIf="totalFiltradas > 0">
+
       <ion-button
         size="small"
         (click)="paginaAnterior()"
         [disabled]="paginaActual === 1">
+
         Anterior
+
       </ion-button>
 
-      <span>Página {{ paginaActual }}</span>
+      <span>
+        Página {{ paginaActual }}
+      </span>
 
       <ion-button
         size="small"
         (click)="paginaSiguiente()"
         [disabled]="(paginaActual * porPagina) >= totalFiltradas">
+
         Siguiente
+
       </ion-button>
+
     </div>
 
   </div>

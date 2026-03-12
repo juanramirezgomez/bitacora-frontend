@@ -2,19 +2,14 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
 import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
 
 import {
   IonContent,
   IonButton,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonModal,
-  IonDatetime,
-  IonDatetimeButton,
-  IonIcon
+  IonInput
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -25,13 +20,7 @@ import {
     FormsModule,
     IonContent,
     IonButton,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonModal,
-    IonDatetime,
-    IonDatetimeButton,
-    IonIcon
+    IonInput
   ],
   templateUrl: './bitacoras.page.html',
   styleUrls: ['./bitacoras.page.scss'],
@@ -62,6 +51,10 @@ export class BitacorasPage implements OnInit {
     private cd: ChangeDetectorRef
   ) {}
 
+  /* =========================================
+     INIT
+  ========================================= */
+
   async ngOnInit() {
 
     await this.storage.create();
@@ -74,11 +67,12 @@ export class BitacorasPage implements OnInit {
     }
 
     this.cargarBitacoras();
+
   }
 
-  // =========================================
-  // CARGAR BITÁCORAS
-  // =========================================
+  /* =========================================
+     CARGAR BITACORAS
+  ========================================= */
 
   cargarBitacoras() {
 
@@ -99,23 +93,32 @@ export class BitacorasPage implements OnInit {
         this.cd.detectChanges();
 
         this.cargando = false;
+
       },
 
       error: (err) => {
-        console.error("❌ Error cargando bitácoras:", err);
+
+        console.error("Error cargando bitácoras:", err);
+
         this.errorMsg = 'Error cargando bitácoras';
+
         this.cargando = false;
+
       }
+
     });
+
   }
 
-  // =========================================
-  // FILTROS
-  // =========================================
+  /* =========================================
+     FILTROS
+  ========================================= */
 
   aplicarFiltros() {
 
     let filtradas = [...this.bitacoras];
+
+    /* BUSQUEDA */
 
     if (this.searchText) {
 
@@ -125,15 +128,27 @@ export class BitacorasPage implements OnInit {
         (b.operador || '').toLowerCase().includes(s) ||
         String(b.turnoNumero || '').includes(this.searchText)
       );
+
     }
+
+    /* FILTRO FECHA */
 
     if (this.fechaFiltro) {
 
-      const fecha = new Date(this.fechaFiltro).toDateString();
+      filtradas = filtradas.filter(b => {
 
-      filtradas = filtradas.filter(b =>
-        new Date(b.fechaInicio).toDateString() === fecha
-      );
+        const fechaBitacora = new Date(b.fechaInicio);
+
+        const year = fechaBitacora.getFullYear();
+        const month = String(fechaBitacora.getMonth()+1).padStart(2,'0');
+        const day = String(fechaBitacora.getDate()).padStart(2,'0');
+
+        const fechaFormateada = `${year}-${month}-${day}`;
+
+        return fechaFormateada === this.fechaFiltro;
+
+      });
+
     }
 
     this.totalFiltradas = filtradas.length;
@@ -142,35 +157,50 @@ export class BitacorasPage implements OnInit {
     const fin = inicio + this.porPagina;
 
     this.bitacorasFiltradas = filtradas.slice(inicio, fin);
+
   }
 
   limpiarFecha() {
+
     this.fechaFiltro = null;
+
     this.paginaActual = 1;
+
     this.aplicarFiltros();
+
   }
 
   paginaAnterior() {
+
     if (this.paginaActual > 1) {
+
       this.paginaActual--;
+
       this.aplicarFiltros();
+
     }
+
   }
 
   paginaSiguiente() {
+
     if ((this.paginaActual * this.porPagina) < this.totalFiltradas) {
+
       this.paginaActual++;
+
       this.aplicarFiltros();
+
     }
+
   }
 
   trackByBitacora(index: number, item: any) {
     return item._id;
   }
 
-  // =========================================
-  // FORMATEAR FECHA (SOLUCIÓN)
-  // =========================================
+  /* =========================================
+     FORMATEAR FECHA
+  ========================================= */
 
   formatearFecha(fecha: any): string {
 
@@ -178,16 +208,17 @@ export class BitacorasPage implements OnInit {
 
     const f = new Date(fecha);
 
-    const dia = String(f.getDate()).padStart(2,'0');
-    const mes = String(f.getMonth()+1).padStart(2,'0');
+    const dia = String(f.getDate()).padStart(2, '0');
+    const mes = String(f.getMonth() + 1).padStart(2, '0');
     const anio = f.getFullYear();
 
     return `${dia}/${mes}/${anio}`;
+
   }
 
-  // =========================================
-  // VISTA PREVIA PDF
-  // =========================================
+  /* =========================================
+     VISTA PREVIA PDF
+  ========================================= */
 
   verPdf(bitacora: any) {
 
@@ -204,18 +235,24 @@ export class BitacorasPage implements OnInit {
         setTimeout(() => {
           window.URL.revokeObjectURL(url);
         }, 5000);
+
       },
 
       error: (err) => {
-        console.error("❌ Error generando vista previa:", err);
+
+        console.error("Error generando vista previa:", err);
+
         alert("Error generando vista previa");
+
       }
+
     });
+
   }
 
-  // =========================================
-  // DESCARGAR PDF
-  // =========================================
+  /* =========================================
+     DESCARGAR PDF
+  ========================================= */
 
   descargarPdf(bitacora: any) {
 
@@ -228,23 +265,32 @@ export class BitacorasPage implements OnInit {
         const url = window.URL.createObjectURL(blob);
 
         const a = document.createElement('a');
+
         a.href = url;
+
         a.download = `bitacora_${bitacora.turnoNumero}.pdf`;
+
         a.click();
 
         window.URL.revokeObjectURL(url);
+
       },
 
       error: (err) => {
-        console.error("❌ Error descargando PDF:", err);
+
+        console.error("Error descargando PDF:", err);
+
         alert("Error descargando PDF");
+
       }
+
     });
+
   }
 
-  // =========================================
-  // DESCARGAR EXCEL
-  // =========================================
+  /* =========================================
+     DESCARGAR EXCEL
+  ========================================= */
 
   descargarExcel(bitacora: any) {
 
@@ -257,23 +303,39 @@ export class BitacorasPage implements OnInit {
         const url = window.URL.createObjectURL(blob);
 
         const a = document.createElement('a');
+
         a.href = url;
+
         a.download = `bitacora_${bitacora.turnoNumero}.xlsx`;
+
         a.click();
 
         window.URL.revokeObjectURL(url);
+
       },
 
       error: (err) => {
-        console.error("❌ Error descargando Excel:", err);
+
+        console.error("Error descargando Excel:", err);
+
         alert("Error descargando Excel");
+
       }
+
     });
+
   }
 
+  /* =========================================
+     LOGOUT
+  ========================================= */
+
   async salir() {
+
     await this.storage.remove('session');
+
     await this.router.navigateByUrl('/login', { replaceUrl: true });
+
   }
 
 }
