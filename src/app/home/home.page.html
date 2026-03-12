@@ -24,9 +24,10 @@
 
         </div>
 
-        <ion-button fill="clear"
-                    class="logout-btn"
-                    (click)="salir()">
+        <ion-button
+          fill="clear"
+          class="logout-btn"
+          (click)="salir()">
           SALIR
         </ion-button>
 
@@ -45,23 +46,21 @@
 
         <div class="selector-buttons">
 
-          <div
+          <button
+            type="button"
             class="selector-btn"
             [class.active]="turno === 'DIA'"
             (click)="cambiarTurno('DIA')">
-
             DÍA
+          </button>
 
-          </div>
-
-          <div
+          <button
+            type="button"
             class="selector-btn"
             [class.active]="turno === 'NOCHE'"
             (click)="cambiarTurno('NOCHE')">
-
             NOCHE
-
-          </div>
+          </button>
 
         </div>
 
@@ -74,23 +73,21 @@
 
         <div class="selector-buttons">
 
-          <div
+          <button
+            type="button"
             class="selector-btn"
             [class.active]="turnoNumero === '39'"
             (click)="cambiarTurnoNumero('39')">
-
             39
+          </button>
 
-          </div>
-
-          <div
+          <button
+            type="button"
             class="selector-btn"
             [class.active]="turnoNumero === '44'"
             (click)="cambiarTurnoNumero('44')">
-
             44
-
-          </div>
+          </button>
 
         </div>
 

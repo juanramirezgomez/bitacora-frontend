@@ -29,7 +29,6 @@ export class HomePage implements OnInit {
 
   turno: string = 'DIA';
   turnoNumero: string = '39';
-
   fechaBitacora: string = '';
 
   bitacoraAbierta: boolean = false;
@@ -48,13 +47,10 @@ export class HomePage implements OnInit {
   ========================================= */
 
   getFechaLocal(): string {
-
     const hoy = new Date();
-
     const year = hoy.getFullYear();
     const month = String(hoy.getMonth() + 1).padStart(2, '0');
     const day = String(hoy.getDate()).padStart(2, '0');
-
     return `${year}-${month}-${day}`;
   }
 
@@ -63,9 +59,7 @@ export class HomePage implements OnInit {
   ========================================= */
 
   cambiarTurno(valor: string) {
-
     this.turno = valor;
-
   }
 
   /* =========================================
@@ -73,9 +67,7 @@ export class HomePage implements OnInit {
   ========================================= */
 
   cambiarTurnoNumero(valor: string) {
-
     this.turnoNumero = valor;
-
   }
 
   /* =========================================
@@ -83,11 +75,9 @@ export class HomePage implements OnInit {
   ========================================= */
 
   formatearFecha(fecha: string): string {
-
     if (!fecha) return '';
 
     const partes = fecha.split('-');
-
     if (partes.length !== 3) return fecha;
 
     const year = partes[0];
@@ -102,7 +92,6 @@ export class HomePage implements OnInit {
   ========================================= */
 
   async ngOnInit() {
-
     await this.storage.create();
 
     this.session = await this.storage.get('session');
@@ -122,39 +111,46 @@ export class HomePage implements OnInit {
   ========================================= */
 
   validarBitacoraAbierta() {
-
     this.api.obtenerBitacoraAbierta().subscribe({
 
       next: async (resp: any) => {
-
         if (resp?.bitacora?._id) {
-
           this.bitacoraAbierta = true;
           this.bitacoraId = resp.bitacora._id;
 
-          this.turno = resp.bitacora.turno;
-          this.turnoNumero = resp.bitacora.turnoNumero;
+          // Cargar datos reales de la bitácora abierta
+          this.turno = resp.bitacora.turno || 'DIA';
+          this.turnoNumero = resp.bitacora.turnoNumero || '39';
 
           if (resp.bitacora.fechaInicio) {
-            const f = new Date (resp.bitacora.fechaInicio);
-            this.fechaBitacora = f.toISOString().split("T")[0];
+            const f = new Date(resp.bitacora.fechaInicio);
+            const year = f.getFullYear();
+            const month = String(f.getMonth() + 1).padStart(2, '0');
+            const day = String(f.getDate()).padStart(2, '0');
+            this.fechaBitacora = `${year}-${month}-${day}`;
           }
 
           await this.storage.set('bitacoraId', resp.bitacora._id);
 
         } else {
-
           this.bitacoraAbierta = false;
           this.bitacoraId = null;
+
+          this.turno = 'DIA';
+          this.turnoNumero = '39';
+          this.fechaBitacora = this.getFechaLocal();
 
           await this.storage.remove('bitacoraId');
         }
       },
 
       error: async () => {
-
         this.bitacoraAbierta = false;
         this.bitacoraId = null;
+
+        this.turno = 'DIA';
+        this.turnoNumero = '39';
+        this.fechaBitacora = this.getFechaLocal();
 
         await this.storage.remove('bitacoraId');
       }
@@ -166,7 +162,6 @@ export class HomePage implements OnInit {
   ========================================= */
 
   iniciarTurno() {
-
     if (this.bitacoraAbierta && this.bitacoraId) {
       this.continuarTurno();
       return;
@@ -181,11 +176,9 @@ export class HomePage implements OnInit {
     ).subscribe({
 
       next: async (resp: any) => {
-
         const id = resp?.bitacora?._id;
 
         if (id) {
-
           await this.storage.set('bitacoraId', id);
 
           this.bitacoraAbierta = true;
@@ -198,11 +191,9 @@ export class HomePage implements OnInit {
       },
 
       error: async (err) => {
-
         this.cargando = false;
 
         if (err?.status === 409 && err?.error?.bitacora?._id) {
-
           const id = err.error.bitacora._id;
 
           this.bitacoraAbierta = true;
@@ -221,15 +212,12 @@ export class HomePage implements OnInit {
   ========================================= */
 
   continuarTurno() {
-
     if (!this.bitacoraId) return;
 
     this.api.obtenerChecklistInicial(this.bitacoraId).subscribe({
-
       next: () => {
         this.router.navigate(['/registro-operacion'], { replaceUrl: true });
       },
-
       error: () => {
         this.router.navigate(['/checklist'], { replaceUrl: true });
       }
@@ -241,11 +229,8 @@ export class HomePage implements OnInit {
   ========================================= */
 
   async salir() {
-
     await this.storage.clear();
-
     this.router.navigateByUrl('/login', { replaceUrl: true });
-
   }
 
 }
