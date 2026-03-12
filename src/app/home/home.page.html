@@ -77,14 +77,20 @@
         </div>
       </div>
 
-      <!-- NUEVO: FECHA BITÁCORA -->
+      <!-- FECHA BITÁCORA CORREGIDA -->
       <div class="selector-group">
         <label>Fecha de la bitácora</label>
 
         <ion-datetime
           presentation="date"
+          locale="es-CL"
+          first-day-of-week="1"
+          show-default-buttons="true"
+          done-text="Aceptar"
+          cancel-text="Cancelar"
           [(ngModel)]="fechaBitacora">
         </ion-datetime>
+
       </div>
 
       <div class="turno-info">
