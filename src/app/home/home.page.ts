@@ -5,11 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import {
   IonContent,
-  IonButton,
-  IonDatetime,
-  IonDatetimeButton,
-  IonItem,
-  IonModal
+  IonButton
 } from '@ionic/angular/standalone';
 
 import { ApiService } from '../services/api';
@@ -22,11 +18,7 @@ import { Storage } from '@ionic/storage-angular';
     CommonModule,
     FormsModule,
     IonContent,
-    IonButton,
-    IonDatetime,
-    IonDatetimeButton,
-    IonItem,
-    IonModal
+    IonButton
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
@@ -38,7 +30,6 @@ export class HomePage implements OnInit {
   turno: string = 'DIA';
   turnoNumero: string = '39';
 
-  // ✅ Fecha inicial local
   fechaBitacora: string = this.getFechaLocal();
 
   bitacoraAbierta: boolean = false;
@@ -53,16 +44,35 @@ export class HomePage implements OnInit {
   ) {}
 
   /* =========================================
-     FECHA LOCAL (YYYY-MM-DD)
+     FECHA LOCAL
   ========================================= */
 
   private getFechaLocal(): string {
+
     const hoy = new Date();
+
     const year = hoy.getFullYear();
     const month = String(hoy.getMonth() + 1).padStart(2, '0');
     const day = String(hoy.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+  }
+
+  /* =========================================
+     FORMATEAR FECHA PARA MOSTRAR
+  ========================================= */
+
+  formatearFecha(fecha: string): string {
+
+    if (!fecha) return '';
+
+    const partes = fecha.split('-');
+
+    const year = partes[0];
+    const month = partes[1];
+    const day = partes[2];
+
+    return `${day}/${month}/${year}`;
   }
 
   /* =========================================

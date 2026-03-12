@@ -91,11 +91,15 @@
 
       </div>
 
-      <!-- INFORMACIÓN -->
+      <!-- VISTA PREVIA -->
       <div class="turno-info">
+
         Turno seleccionado: {{ turno }} - Turno {{ turnoNumero }}
+
         <br>
-        Fecha: {{ fechaBitacora | date:'shortDate' }}
+
+        Fecha: {{ formatearFecha(fechaBitacora) }}
+
       </div>
 
       <!-- BOTÓN -->
