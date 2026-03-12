@@ -3,10 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import {
-  IonContent,
-  IonButton
-} from '@ionic/angular/standalone';
+import { IonContent, IonButton } from '@ionic/angular/standalone';
 
 import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
@@ -27,15 +24,12 @@ export class HomePage implements OnInit {
 
   session: any = null;
 
-  turno: string = 'DIA';
-  turnoNumero: string = '39';
+  turno = 'DIA';
+  turnoNumero = '39';
+  fechaBitacora = '';
 
-  fechaBitacora: string = '';
-
-  bitacoraAbierta: boolean = false;
+  bitacoraAbierta = false;
   bitacoraId: string | null = null;
-
-  cargando = false;
 
   constructor(
     private api: ApiService,
@@ -43,61 +37,11 @@ export class HomePage implements OnInit {
     private router: Router
   ) {}
 
-  /* =========================================
-     FECHA LOCAL
-  ========================================= */
-
-  getFechaLocal(): string {
-
-    const hoy = new Date();
-
-    const year = hoy.getFullYear();
-    const month = String(hoy.getMonth() + 1).padStart(2, '0');
-    const day = String(hoy.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
+  ngOnInit() {
+    this.init();
   }
 
-  /* =========================================
-     CAMBIAR TURNO
-  ========================================= */
-
-  cambiarTurno(valor: string) {
-    this.turno = valor;
-  }
-
-  /* =========================================
-     CAMBIAR NUMERO TURNO
-  ========================================= */
-
-  cambiarTurnoNumero(valor: string) {
-    this.turnoNumero = valor;
-  }
-
-  /* =========================================
-     FORMATEAR FECHA
-  ========================================= */
-
-  formatearFecha(fecha: string): string {
-
-    if (!fecha) return '';
-
-    const partes = fecha.split('-');
-
-    if (partes.length !== 3) return fecha;
-
-    const year = partes[0];
-    const month = partes[1];
-    const day = partes[2];
-
-    return `${day}/${month}/${year}`;
-  }
-
-  /* =========================================
-     INIT
-  ========================================= */
-
-  async ngOnInit() {
+  async init() {
 
     await this.storage.create();
 
@@ -113,9 +57,32 @@ export class HomePage implements OnInit {
     this.validarBitacoraAbierta();
   }
 
-  /* =========================================
-     VALIDAR BITÁCORA ABIERTA
-  ========================================= */
+  getFechaLocal(): string {
+    const hoy = new Date();
+    const y = hoy.getFullYear();
+    const m = String(hoy.getMonth() + 1).padStart(2, '0');
+    const d = String(hoy.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  cambiarTurno(valor: string) {
+    console.log("Turno:", valor);
+    this.turno = valor;
+  }
+
+  cambiarTurnoNumero(valor: string) {
+    console.log("TurnoNumero:", valor);
+    this.turnoNumero = valor;
+  }
+
+  formatearFecha(fecha: string) {
+
+    if (!fecha) return '';
+
+    const partes = fecha.split('-');
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  }
 
   validarBitacoraAbierta() {
 
@@ -128,23 +95,16 @@ export class HomePage implements OnInit {
           this.bitacoraAbierta = true;
           this.bitacoraId = resp.bitacora._id;
 
-          this.turno = resp.bitacora.turno || 'DIA';
-          this.turnoNumero = resp.bitacora.turnoNumero || '39';
+          this.turno = resp.bitacora.turno;
+          this.turnoNumero = resp.bitacora.turnoNumero;
 
-          if (resp.bitacora.fechaInicio) {
-            const f = new Date(resp.bitacora.fechaInicio);
-            this.fechaBitacora = f.toISOString().split('T')[0];
-          }
+          const f = new Date(resp.bitacora.fechaInicio);
+          this.fechaBitacora = f.toISOString().split('T')[0];
 
           await this.storage.set('bitacoraId', resp.bitacora._id);
 
-        } else {
-
-          this.bitacoraAbierta = false;
-          this.bitacoraId = null;
-
-          await this.storage.remove('bitacoraId');
         }
+
       },
 
       error: async () => {
@@ -153,22 +113,20 @@ export class HomePage implements OnInit {
         this.bitacoraId = null;
 
         await this.storage.remove('bitacoraId');
+
       }
     });
-  }
 
-  /* =========================================
-     INICIAR TURNO
-  ========================================= */
+  }
 
   iniciarTurno() {
 
     if (this.bitacoraAbierta && this.bitacoraId) {
+
       this.continuarTurno();
       return;
-    }
 
-    this.cargando = true;
+    }
 
     this.api.iniciarTurno(
       this.turno,
@@ -184,57 +142,36 @@ export class HomePage implements OnInit {
 
           await this.storage.set('bitacoraId', id);
 
-          this.bitacoraAbierta = true;
-          this.bitacoraId = id;
-
           this.router.navigate(['/checklist'], { replaceUrl: true });
+
         }
 
-        this.cargando = false;
       },
 
       error: async (err) => {
-
-        this.cargando = false;
 
         if (err?.status === 409 && err?.error?.bitacora?._id) {
 
           const id = err.error.bitacora._id;
 
-          this.bitacoraAbierta = true;
-          this.bitacoraId = id;
-
           await this.storage.set('bitacoraId', id);
 
           this.continuarTurno();
+
         }
+
       }
     });
-  }
 
-  /* =========================================
-     CONTINUAR TURNO
-  ========================================= */
+  }
 
   continuarTurno() {
 
     if (!this.bitacoraId) return;
 
-    this.api.obtenerChecklistInicial(this.bitacoraId).subscribe({
+    this.router.navigate(['/registro-operacion'], { replaceUrl: true });
 
-      next: () => {
-        this.router.navigate(['/registro-operacion'], { replaceUrl: true });
-      },
-
-      error: () => {
-        this.router.navigate(['/checklist'], { replaceUrl: true });
-      }
-    });
   }
-
-  /* =========================================
-     LOGOUT
-  ========================================= */
 
   async salir() {
 

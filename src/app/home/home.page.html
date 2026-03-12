@@ -1,151 +1,132 @@
 <ion-content class="home-bg">
 
-  <div class="home-wrapper">
+<div class="home-wrapper">
 
-    <div class="home-card">
+<div class="home-card">
 
-      <!-- HEADER -->
+<!-- HEADER -->
 
-      <div class="card-header">
+<div class="card-header">
 
-        <div class="user-box" *ngIf="session?.user">
+<div class="user-box" *ngIf="session?.user">
 
-          <div class="avatar">
-            {{ session.user.nombre?.charAt(0) }}
-          </div>
+<div class="avatar">
+{{ session.user.nombre?.charAt(0) }}
+</div>
 
-          <div class="user-text">
+<div class="user-text">
 
-            <div class="user-name">
-              {{ session.user.nombre }}
-            </div>
+<div class="user-name">
+{{ session.user.nombre }}
+</div>
 
-            <div class="user-role">
-              Rol: {{ session.user.rol }}
-            </div>
+<div class="user-role">
+Rol: {{ session.user.rol }}
+</div>
 
-          </div>
+</div>
 
-        </div>
+</div>
 
-        <ion-button
-          fill="clear"
-          class="logout-btn"
-          (click)="salir()">
-          SALIR
-        </ion-button>
+<ion-button fill="clear" (click)="salir()">
+SALIR
+</ion-button>
 
-      </div>
+</div>
 
-      <h2>Iniciar turno</h2>
+<h2>Iniciar turno</h2>
 
-      <p class="subtitle">
-        Selecciona el turno, número y fecha de la bitácora.
-      </p>
+<p class="subtitle">
+Selecciona el turno, número y fecha de la bitácora.
+</p>
 
-      <!-- TURNO -->
+<!-- TURNO -->
 
-      <div class="selector-group">
+<div class="selector-group">
 
-        <label>Turno</label>
+<label>Turno</label>
 
-        <div class="selector-buttons">
+<ion-button
+expand="block"
+(color)="turno === 'DIA' ? 'primary' : 'medium'"
+(click)="cambiarTurno('DIA')">
 
-          <button
-            class="selector-btn"
-            [class.active]="turno === 'DIA'"
-            (click)="cambiarTurno('DIA')">
+DÍA
 
-            DÍA
+</ion-button>
 
-          </button>
+<ion-button
+expand="block"
+(color)="turno === 'NOCHE' ? 'primary' : 'medium'"
+(click)="cambiarTurno('NOCHE')">
 
-          <button
-            class="selector-btn"
-            [class.active]="turno === 'NOCHE'"
-            (click)="cambiarTurno('NOCHE')">
+NOCHE
 
-            NOCHE
+</ion-button>
 
-          </button>
+</div>
 
-        </div>
+<!-- NUMERO TURNO -->
 
-      </div>
+<div class="selector-group">
 
-      <!-- NUMERO TURNO -->
+<label>N° Turno</label>
 
-      <div class="selector-group">
+<ion-button
+expand="block"
+(color)="turnoNumero === '39' ? 'primary' : 'medium'"
+(click)="cambiarTurnoNumero('39')">
 
-        <label>N° Turno</label>
+39
 
-        <div class="selector-buttons">
+</ion-button>
 
-          <button
-            class="selector-btn"
-            [class.active]="turnoNumero === '39'"
-            (click)="cambiarTurnoNumero('39')">
+<ion-button
+expand="block"
+(color)="turnoNumero === '44' ? 'primary' : 'medium'"
+(click)="cambiarTurnoNumero('44')">
 
-            39
+44
 
-          </button>
+</ion-button>
 
-          <button
-            class="selector-btn"
-            [class.active]="turnoNumero === '44'"
-            (click)="cambiarTurnoNumero('44')">
+</div>
 
-            44
+<!-- FECHA -->
 
-          </button>
+<div class="selector-group">
 
-        </div>
+<label>Fecha de la bitácora</label>
 
-      </div>
+<input
+type="date"
+[(ngModel)]="fechaBitacora"
+/>
 
-      <!-- FECHA -->
+</div>
 
-      <div class="selector-group">
+<div class="turno-info">
 
-        <label>Fecha de la bitácora</label>
+<strong>
+Turno seleccionado: {{ turno }} - Turno {{ turnoNumero }}
+</strong>
 
-        <input
-          type="date"
-          [(ngModel)]="fechaBitacora"
-          class="date-input"
-        />
+<br>
 
-      </div>
+<strong>
+Fecha: {{ formatearFecha(fechaBitacora) }}
+</strong>
 
-      <!-- PREVIEW -->
+</div>
 
-      <div class="turno-info">
+<ion-button expand="block" (click)="iniciarTurno()">
 
-        <strong>
-          Turno seleccionado: {{ turno }} - Turno {{ turnoNumero }}
-        </strong>
+{{ bitacoraAbierta ? 'CONTINUAR TURNO ACTIVO' : 'INICIAR TURNO' }}
 
-        <br>
+</ion-button>
 
-        <strong>
-          Fecha: {{ formatearFecha(fechaBitacora) }}
-        </strong>
+</div>
 
-      </div>
-
-      <!-- BOTÓN -->
-
-      <ion-button
-        expand="block"
-        class="continue-btn"
-        (click)="iniciarTurno()">
-
-        {{ bitacoraAbierta ? 'CONTINUAR TURNO ACTIVO' : 'INICIAR TURNO' }}
-
-      </ion-button>
-
-    </div>
-
-  </div>
+</div>
 
 </ion-content>
