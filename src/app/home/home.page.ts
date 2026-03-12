@@ -59,20 +59,41 @@ export class HomePage implements OnInit {
   }
 
   /* =========================================
+     CUANDO CAMBIA LA FECHA
+  ========================================= */
+
+  cambiarFecha(event: any) {
+
+    if (!event?.detail?.value) return;
+
+    const fechaISO = event.detail.value;
+
+    const fecha = new Date(fechaISO);
+
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2,'0');
+    const day = String(fecha.getDate()).padStart(2,'0');
+
+    this.fechaBitacora = `${year}-${month}-${day}`;
+  }
+
+  /* =========================================
      FORMATEAR FECHA PARA MOSTRAR
   ========================================= */
 
-  formatearFecha(fecha: any): string {
+  formatearFecha(fecha: string): string {
 
     if (!fecha) return '';
 
-    const f = new Date(fecha);
+    const partes = fecha.split('-');
 
-    const dia = String(f.getDate()).padStart(2, '0');
-    const mes = String(f.getMonth() + 1).padStart(2, '0');
-    const anio = f.getFullYear();
+    if (partes.length !== 3) return fecha;
 
-    return `${dia}/${mes}/${anio}`;
+    const year = partes[0];
+    const month = partes[1];
+    const day = partes[2];
+
+    return `${day}/${month}/${year}`;
   }
 
   /* =========================================
