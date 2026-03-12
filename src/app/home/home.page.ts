@@ -132,6 +132,14 @@ export class HomePage implements OnInit {
           this.bitacoraAbierta = true;
           this.bitacoraId = resp.bitacora._id;
 
+          this.turno = resp.bitacora.turno;
+          this.turnoNumero = resp.bitacora.turnoNumero;
+
+          if (resp.bitacora.fechaInicio) {
+            const f = new Date (resp.bitacora.fechaInicio);
+            this.fechaBitacora = f.toISOString().split("T")[0];
+          }
+
           await this.storage.set('bitacoraId', resp.bitacora._id);
 
         } else {
