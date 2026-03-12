@@ -62,17 +62,17 @@ export class HomePage implements OnInit {
      FORMATEAR FECHA PARA MOSTRAR
   ========================================= */
 
-  formatearFecha(fecha: string): string {
+  formatearFecha(fecha: any): string {
 
     if (!fecha) return '';
 
-    const partes = fecha.split('-');
+    const f = new Date(fecha);
 
-    const year = partes[0];
-    const month = partes[1];
-    const day = partes[2];
+    const dia = String(f.getDate()).padStart(2, '0');
+    const mes = String(f.getMonth() + 1).padStart(2, '0');
+    const anio = f.getFullYear();
 
-    return `${day}/${month}/${year}`;
+    return `${dia}/${mes}/${anio}`;
   }
 
   /* =========================================

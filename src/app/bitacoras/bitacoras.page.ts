@@ -62,10 +62,6 @@ export class BitacorasPage implements OnInit {
     private cd: ChangeDetectorRef
   ) {}
 
-  // =========================================
-  // INIT
-  // =========================================
-
   async ngOnInit() {
 
     await this.storage.create();
@@ -97,6 +93,7 @@ export class BitacorasPage implements OnInit {
         this.totalCerradas = this.bitacoras.length;
 
         this.paginaActual = 1;
+
         this.aplicarFiltros();
 
         this.cd.detectChanges();
@@ -121,7 +118,9 @@ export class BitacorasPage implements OnInit {
     let filtradas = [...this.bitacoras];
 
     if (this.searchText) {
+
       const s = this.searchText.toLowerCase();
+
       filtradas = filtradas.filter(b =>
         (b.operador || '').toLowerCase().includes(s) ||
         String(b.turnoNumero || '').includes(this.searchText)
@@ -129,7 +128,9 @@ export class BitacorasPage implements OnInit {
     }
 
     if (this.fechaFiltro) {
+
       const fecha = new Date(this.fechaFiltro).toDateString();
+
       filtradas = filtradas.filter(b =>
         new Date(b.fechaInicio).toDateString() === fecha
       );
@@ -165,6 +166,23 @@ export class BitacorasPage implements OnInit {
 
   trackByBitacora(index: number, item: any) {
     return item._id;
+  }
+
+  // =========================================
+  // FORMATEAR FECHA (SOLUCIÓN)
+  // =========================================
+
+  formatearFecha(fecha: any): string {
+
+    if (!fecha) return '';
+
+    const f = new Date(fecha);
+
+    const dia = String(f.getDate()).padStart(2,'0');
+    const mes = String(f.getMonth()+1).padStart(2,'0');
+    const anio = f.getFullYear();
+
+    return `${dia}/${mes}/${anio}`;
   }
 
   // =========================================
@@ -252,10 +270,6 @@ export class BitacorasPage implements OnInit {
       }
     });
   }
-
-  // =========================================
-  // LOGOUT
-  // =========================================
 
   async salir() {
     await this.storage.remove('session');
