@@ -40,6 +40,7 @@
       <!-- TURNO -->
       <div class="selector-group">
         <label>Turno</label>
+
         <div class="selector-buttons">
 
           <div class="selector-btn"
@@ -57,9 +58,10 @@
         </div>
       </div>
 
-      <!-- NUMERO -->
+      <!-- NUMERO TURNO -->
       <div class="selector-group">
         <label>N° Turno</label>
+
         <div class="selector-buttons">
 
           <div class="selector-btn"
@@ -77,31 +79,19 @@
         </div>
       </div>
 
-      <!-- FECHA BITÁCORA (CORREGIDO) -->
+      <!-- FECHA BITÁCORA -->
       <div class="selector-group">
         <label>Fecha de la bitácora</label>
 
-        <ion-item lines="none">
-          <ion-datetime-button datetime="fechaBitacoraPicker"></ion-datetime-button>
-        </ion-item>
-
-        <ion-modal keepContentsMounted="true">
-          <ng-template>
-            <ion-datetime
-              id="fechaBitacoraPicker"
-              presentation="date"
-              locale="es-CL"
-              first-day-of-week="1"
-              show-default-buttons="true"
-              done-text="Aceptar"
-              cancel-text="Cancelar"
-              [(ngModel)]="fechaBitacora">
-            </ion-datetime>
-          </ng-template>
-        </ion-modal>
+        <input
+          type="date"
+          [(ngModel)]="fechaBitacora"
+          class="date-input"
+        />
 
       </div>
 
+      <!-- INFORMACIÓN -->
       <div class="turno-info">
         Turno seleccionado: {{ turno }} - Turno {{ turnoNumero }}
         <br>
