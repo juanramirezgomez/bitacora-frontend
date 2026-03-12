@@ -65,11 +65,7 @@ export class RegistroOperacionPage implements OnInit {
     private api: ApiService,
     private toast: ToastController
   ) {
-    addIcons({
-      timeOutline,
-      waterOutline,
-      closeOutline
-    });
+    addIcons({ timeOutline, waterOutline, closeOutline });
   }
 
   async ngOnInit() {
@@ -86,11 +82,30 @@ export class RegistroOperacionPage implements OnInit {
     }
 
     this.api.getBitacoraById(this.bitacoraId).subscribe((b: any) => {
-      this.turnoDiaNoche = b?.turnoDiaNoche;
+      this.turnoDiaNoche = b?.turno;
       this.turnoNumero = b?.turnoNumero;
     });
 
     this.cargar();
+  }
+
+  // 🔥 AUTOFORMATEO HH:mm
+  formatearHora(event: any) {
+    let valor = event.target.value.replace(/\D/g, '');
+
+    if (valor.length > 4) {
+      valor = valor.substring(0, 4);
+    }
+
+    if (valor.length >= 3) {
+      this.hora = valor.substring(0, 2) + ':' + valor.substring(2);
+    } else {
+      this.hora = valor;
+    }
+  }
+
+  validarHora(hora: string): boolean {
+    return /^([01]\d|2[0-3]):([0-5]\d)$/.test(hora);
   }
 
   cargar() {
@@ -116,8 +131,8 @@ export class RegistroOperacionPage implements OnInit {
 
   guardar() {
 
-    if (!this.hora) {
-      this.mostrarToast('Debes ingresar la hora', 'warning');
+    if (!this.validarHora(this.hora)) {
+      this.mostrarToast('Hora inválida. Usa formato HH:mm', 'warning');
       return;
     }
 
@@ -177,9 +192,7 @@ export class RegistroOperacionPage implements OnInit {
   irACierre() {
     if (!this.bitacoraId) return;
 
-    this.router.navigate(['/cierre'], {
-      replaceUrl: true
-    });
+    this.router.navigate(['/cierre'], { replaceUrl: true });
   }
 
   async mostrarToast(mensaje: string, color: string) {
@@ -195,5 +208,4 @@ export class RegistroOperacionPage implements OnInit {
     await this.storage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
-
 }

@@ -34,7 +34,7 @@
 
       <h2>Iniciar turno</h2>
       <p class="subtitle">
-        Selecciona el turno y continúa al checklist inicial.
+        Selecciona el turno, número y fecha de la bitácora.
       </p>
 
       <!-- TURNO -->
@@ -77,8 +77,20 @@
         </div>
       </div>
 
+      <!-- NUEVO: FECHA BITÁCORA -->
+      <div class="selector-group">
+        <label>Fecha de la bitácora</label>
+
+        <ion-datetime
+          presentation="date"
+          [(ngModel)]="fechaBitacora">
+        </ion-datetime>
+      </div>
+
       <div class="turno-info">
         Turno seleccionado: {{ turno }} - Turno {{ turnoNumero }}
+        <br>
+        Fecha: {{ fechaBitacora | date:'shortDate' }}
       </div>
 
       <!-- BOTÓN -->
@@ -89,10 +101,6 @@
         {{ bitacoraAbierta ? 'CONTINUAR TURNO ACTIVO' : 'INICIAR TURNO' }}
 
       </ion-button>
-
-      <div class="error-box" *ngIf="bitacoraAbierta">
-        
-      </div>
 
     </div>
 

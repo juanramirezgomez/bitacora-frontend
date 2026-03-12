@@ -29,7 +29,7 @@
 
       <div class="main-grid">
 
-        <!-- HORA -->
+        <!-- 🔥 HORA (MANUAL + AUTO :) -->
         <div class="param-card">
           <div class="param-header">
             <label>Hora *</label>
@@ -38,13 +38,17 @@
 
           <div class="param-body">
             <ion-input
-              type="time"
-              [(ngModel)]="hora">
+              type="text"
+              inputmode="numeric"
+              maxlength="5"
+              placeholder="HH:mm"
+              [(ngModel)]="hora"
+              (ionInput)="formatearHora($event)">
             </ion-input>
           </div>
         </div>
 
-        <!-- PARAMETROS -->
+        <!-- PARÁMETROS -->
         <div
           class="param-card"
           *ngFor="let p of parametros; let i = index">

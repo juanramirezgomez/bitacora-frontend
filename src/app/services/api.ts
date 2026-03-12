@@ -8,18 +8,21 @@ import { from, switchMap, Observable, of, catchError, map } from 'rxjs';
 export class ApiService {
 
   private baseUrl = environment.apiUrl;
+  private storageReady: Promise<any>;
 
   constructor(
     private http: HttpClient,
     private storage: Storage
-  ) {}
+  ) {
+    this.storageReady = this.storage.create();
+  }
 
   // ========================================
   // SESSION / AUTH HEADERS
   // ========================================
 
   private async getSession() {
-    await this.storage.create();
+    await this.storageReady;
     return this.storage.get('session');
   }
 
@@ -27,7 +30,9 @@ export class ApiService {
     const session = await this.getSession();
     const token = session?.token;
 
-    let headers = new HttpHeaders();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
@@ -62,11 +67,15 @@ export class ApiService {
   // BITÁCORAS
   // ========================================
 
-  iniciarTurno(turno: string, turnoNumero: string): Observable<any> {
+  iniciarTurno(
+    turno: string,
+    turnoNumero: string,
+    fechaBitacora: string
+  ): Observable<any> {
     return this.authRequest(headers =>
       this.http.post(
         `${this.baseUrl}/api/bitacoras/iniciar`,
-        { turno, turnoNumero },
+        { turno, turnoNumero, fechaInicio: fechaBitacora },
         { headers }
       )
     );
@@ -105,31 +114,25 @@ export class ApiService {
 
   guardarChecklistInicial(bitacoraId: string, data: any): Observable<any> {
 
-  // 📴 SI NO HAY INTERNET → GUARDAR LOCAL
-  if (!navigator.onLine) {
+    if (!navigator.onLine) {
+      const localKey = `offline-checklist-${bitacoraId}`;
+      return from(this.storage.set(localKey, data)).pipe(
+        map(() => ({
+          offline: true,
+          message: 'Guardado localmente'
+        }))
+      );
+    }
 
-    const localKey = `offline-checklist-${bitacoraId}`;
-
-    return from(
-      this.storage.set(localKey, data)
-    ).pipe(
-      map(() => ({
-        offline: true,
-        message: 'Guardado localmente'
-      }))
+    return this.authRequest(headers =>
+      this.http.post(
+        `${this.baseUrl}/api/bitacoras/${bitacoraId}/checklist-inicial`,
+        data,
+        { headers }
+      )
     );
   }
 
-  // 🌐 SI HAY INTERNET → POST NORMAL
-  return this.authRequest(headers =>
-    this.http.post(
-      `${this.baseUrl}/api/bitacoras/${bitacoraId}/checklist-inicial`,
-      data,
-      { headers }
-    )
-  );
-} 
-  
   obtenerChecklistInicial(bitacoraId: string): Observable<any> {
     return this.authRequest(headers =>
       this.http.get(
@@ -218,7 +221,7 @@ export class ApiService {
   descargarPdf(bitacoraId: string): Observable<Blob> {
     return this.authRequest(headers =>
       this.http.get(
-        `${this.baseUrl}/api/reportes/${bitacoraId}/reporte.pdf`,
+        `${this.baseUrl}/api/bitacoras/${bitacoraId}/reporte.pdf`,
         {
           headers,
           responseType: 'blob'
@@ -228,13 +231,13 @@ export class ApiService {
   }
 
   // ========================================
-  // EXCEL 🔥 NUEVO
+  // EXCEL
   // ========================================
 
   descargarExcel(bitacoraId: string): Observable<Blob> {
     return this.authRequest(headers =>
       this.http.get(
-        `${this.baseUrl}/api/reportes/${bitacoraId}/reporte.excel`,
+        `${this.baseUrl}/api/bitacoras/${bitacoraId}/reporte.excel`,
         {
           headers,
           responseType: 'blob'

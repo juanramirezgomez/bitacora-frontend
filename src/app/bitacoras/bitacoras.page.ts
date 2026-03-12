@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api';
 import { Storage } from '@ionic/storage-angular';
-import { Browser } from '@capacitor/browser';
 
 import {
   IonContent,
@@ -63,12 +62,14 @@ export class BitacorasPage implements OnInit {
     private cd: ChangeDetectorRef
   ) {}
 
-  // ===================================================
+  // =========================================
   // INIT
-  // ===================================================
+  // =========================================
 
   async ngOnInit() {
+
     await this.storage.create();
+
     this.session = await this.storage.get('session');
 
     if (!this.session?.token) {
@@ -79,14 +80,16 @@ export class BitacorasPage implements OnInit {
     this.cargarBitacoras();
   }
 
-  // ===================================================
+  // =========================================
   // CARGAR BITÁCORAS
-  // ===================================================
+  // =========================================
 
   cargarBitacoras() {
+
     this.cargando = true;
 
     this.api.listarBitacoras({ estado: 'CERRADA' }).subscribe({
+
       next: (resp: any) => {
 
         this.bitacoras = Array.isArray(resp) ? resp : [];
@@ -100,6 +103,7 @@ export class BitacorasPage implements OnInit {
 
         this.cargando = false;
       },
+
       error: (err) => {
         console.error("❌ Error cargando bitácoras:", err);
         this.errorMsg = 'Error cargando bitácoras';
@@ -108,11 +112,12 @@ export class BitacorasPage implements OnInit {
     });
   }
 
-  // ===================================================
+  // =========================================
   // FILTROS
-  // ===================================================
+  // =========================================
 
   aplicarFiltros() {
+
     let filtradas = [...this.bitacoras];
 
     if (this.searchText) {
@@ -162,37 +167,95 @@ export class BitacorasPage implements OnInit {
     return item._id;
   }
 
-  // ===================================================
-  // PDF / EXCEL (ANDROID READY)
-  // ===================================================
+  // =========================================
+  // VISTA PREVIA PDF
+  // =========================================
 
-  async verPdf(bitacora: any) {
+  verPdf(bitacora: any) {
+
     if (!bitacora?._id) return;
 
-    const url = `https://bitacora-backend-vb0e.onrender.com/api/bitacoras/${bitacora._id}/reporte.pdf`;
+    this.api.descargarPdf(bitacora._id).subscribe({
 
-    await Browser.open({ url });
+      next: (blob: Blob) => {
+
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url, '_blank');
+
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 5000);
+      },
+
+      error: (err) => {
+        console.error("❌ Error generando vista previa:", err);
+        alert("Error generando vista previa");
+      }
+    });
   }
 
-  async descargarPdf(bitacora: any) {
+  // =========================================
+  // DESCARGAR PDF
+  // =========================================
+
+  descargarPdf(bitacora: any) {
+
     if (!bitacora?._id) return;
 
-    const url = `https://bitacora-backend-vb0e.onrender.com/api/bitacoras/${bitacora._id}/reporte.pdf`;
+    this.api.descargarPdf(bitacora._id).subscribe({
 
-    await Browser.open({ url });
+      next: (blob: Blob) => {
+
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bitacora_${bitacora.turnoNumero}.pdf`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+
+      error: (err) => {
+        console.error("❌ Error descargando PDF:", err);
+        alert("Error descargando PDF");
+      }
+    });
   }
 
-  async descargarExcel(bitacora: any) {
+  // =========================================
+  // DESCARGAR EXCEL
+  // =========================================
+
+  descargarExcel(bitacora: any) {
+
     if (!bitacora?._id) return;
 
-    const url = `https://bitacora-backend-vb0e.onrender.com/api/bitacoras/${bitacora._id}/reporte.excel`;
+    this.api.descargarExcel(bitacora._id).subscribe({
 
-    await Browser.open({ url });
+      next: (blob: Blob) => {
+
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bitacora_${bitacora.turnoNumero}.xlsx`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+
+      error: (err) => {
+        console.error("❌ Error descargando Excel:", err);
+        alert("Error descargando Excel");
+      }
+    });
   }
 
-  // ===================================================
+  // =========================================
   // LOGOUT
-  // ===================================================
+  // =========================================
 
   async salir() {
     await this.storage.remove('session');

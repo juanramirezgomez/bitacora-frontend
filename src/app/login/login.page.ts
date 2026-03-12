@@ -67,12 +67,25 @@ export class LoginPage {
       password: this.password
     }).subscribe({
 
-      next: async (resp) => {
+      next: async (resp: any) => {
 
         await this.storage.create();
-        await this.storage.set('session', resp);
 
-        const rol = resp?.user?.rol;
+        // 🔥 GUARDAR SESIÓN DE FORMA SEGURA
+        const session = {
+          token: resp.token || resp.accessToken, // soporta ambos formatos
+          user: resp.user
+        };
+
+        if (!session.token) {
+          this.errorMsg = 'No se recibió token del servidor';
+          this.cargando = false;
+          return;
+        }
+
+        await this.storage.set('session', session);
+
+        const rol = session?.user?.rol;
 
         this.cargando = false;
 

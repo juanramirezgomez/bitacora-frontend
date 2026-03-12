@@ -5,7 +5,8 @@ import { FormsModule } from '@angular/forms';
 
 import {
   IonContent,
-  IonButton
+  IonButton,
+  IonDatetime
 } from '@ionic/angular/standalone';
 
 import { ApiService } from '../services/api';
@@ -18,7 +19,8 @@ import { Storage } from '@ionic/storage-angular';
     CommonModule,
     FormsModule,
     IonContent,
-    IonButton
+    IonButton,
+    IonDatetime
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
@@ -29,6 +31,9 @@ export class HomePage implements OnInit {
 
   turno: string = 'DIA';
   turnoNumero: string = '39';
+
+  // 🔥 NUEVO: Fecha seleccionable
+  fechaBitacora: string = new Date().toISOString();
 
   bitacoraAbierta: boolean = false;
   bitacoraId: string | null = null;
@@ -42,6 +47,7 @@ export class HomePage implements OnInit {
   ) {}
 
   async ngOnInit() {
+
     await this.storage.create();
 
     this.session = await this.storage.get('session');
@@ -95,7 +101,12 @@ export class HomePage implements OnInit {
 
     this.cargando = true;
 
-    this.api.iniciarTurno(this.turno, this.turnoNumero).subscribe({
+    // 🔥 Enviamos también la fecha seleccionada
+    this.api.iniciarTurno(
+      this.turno,
+      this.turnoNumero,
+      this.fechaBitacora
+    ).subscribe({
 
       next: async (resp: any) => {
 
@@ -140,23 +151,7 @@ export class HomePage implements OnInit {
     this.api.obtenerChecklistInicial(this.bitacoraId).subscribe({
 
       next: () => {
-
-        this.api.listarRegistroOperacion(this.bitacoraId!).subscribe({
-
-          next: (registros: any[]) => {
-
-            if (!registros || registros.length === 0) {
-              this.router.navigate(['/registro-operacion'], { replaceUrl: true });
-              return;
-            }
-
-            this.router.navigate(['/registro-operacion'], { replaceUrl: true });
-          },
-
-          error: () => {
-            this.router.navigate(['/registro-operacion'], { replaceUrl: true });
-          }
-        });
+        this.router.navigate(['/registro-operacion'], { replaceUrl: true });
       },
 
       error: () => {
