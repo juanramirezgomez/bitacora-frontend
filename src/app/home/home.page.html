@@ -5,6 +5,7 @@
     <div class="home-card">
 
       <!-- HEADER -->
+
       <div class="card-header">
 
         <div class="user-box" *ngIf="session?.user">
@@ -14,12 +15,15 @@
           </div>
 
           <div class="user-text">
+
             <div class="user-name">
               {{ session.user.nombre }}
             </div>
+
             <div class="user-role">
               Rol: {{ session.user.rol }}
             </div>
+
           </div>
 
         </div>
@@ -40,6 +44,7 @@
       </p>
 
       <!-- TURNO -->
+
       <div class="selector-group">
 
         <label>Turno</label>
@@ -47,19 +52,21 @@
         <div class="selector-buttons">
 
           <button
-            type="button"
             class="selector-btn"
             [class.active]="turno === 'DIA'"
             (click)="cambiarTurno('DIA')">
+
             DÍA
+
           </button>
 
           <button
-            type="button"
             class="selector-btn"
             [class.active]="turno === 'NOCHE'"
             (click)="cambiarTurno('NOCHE')">
+
             NOCHE
+
           </button>
 
         </div>
@@ -67,6 +74,7 @@
       </div>
 
       <!-- NUMERO TURNO -->
+
       <div class="selector-group">
 
         <label>N° Turno</label>
@@ -74,26 +82,29 @@
         <div class="selector-buttons">
 
           <button
-            type="button"
             class="selector-btn"
             [class.active]="turnoNumero === '39'"
             (click)="cambiarTurnoNumero('39')">
+
             39
+
           </button>
 
           <button
-            type="button"
             class="selector-btn"
             [class.active]="turnoNumero === '44'"
             (click)="cambiarTurnoNumero('44')">
+
             44
+
           </button>
 
         </div>
 
       </div>
 
-      <!-- FECHA BITÁCORA -->
+      <!-- FECHA -->
+
       <div class="selector-group">
 
         <label>Fecha de la bitácora</label>
@@ -106,7 +117,8 @@
 
       </div>
 
-      <!-- VISTA PREVIA -->
+      <!-- PREVIEW -->
+
       <div class="turno-info">
 
         <strong>
@@ -122,6 +134,7 @@
       </div>
 
       <!-- BOTÓN -->
+
       <ion-button
         expand="block"
         class="continue-btn"
